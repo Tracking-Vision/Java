@@ -70,12 +70,12 @@ public class Teste {
                 janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
             }
         }
-        System.out.println(janelas);
-        System.out.println(janelasPid);
-        for (int i = 0; i < janelas.size(); i++) {
 
-            Log log = new Log(null,null, janelasPid.get(i),janelas.get(i) , api.getProcessador().getUso(), api.getDisco().get(i).getTamanho(),api.getMemoriaEmUso());
+        for (int j = 0; j < janelas.size(); j++) {
+
+            Log log = new Log(null,null, janelasPid.get(j),janelas.get(j) , api.getProcessador().getUso(), api.getDisco().get(0).getTamanho(),api.getMemoriaEmUso());
             logService.salvarLog(log);
+
         }
 
 
