@@ -18,13 +18,18 @@ public class Conexao {
     public Conexao() {
         BasicDataSource dataSource = new BasicDataSource();
 
-        dataSource​.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//        dataSource​.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//
+//        dataSource​.setUrl("jdbc:sqlserver://localhost;encrypt=true;database=BANCO;integratedSecurity=true;");
+//
+//        dataSource​.setUsername("USUARIO");
+//
+//        dataSource​.setPassword("SENHA");
 
-        dataSource​.setUrl("jdbc:sqlserver://localhost;encrypt=true;database=BANCO;integratedSecurity=true;");
-
-        dataSource​.setUsername("USUARIO");
-
-        dataSource​.setPassword("SENHA");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/track");
+        dataSource.setUsername("root");
+        dataSource.setPassword("paulo1421");
 
         this.connection = new JdbcTemplate(dataSource);
     }

@@ -4,6 +4,9 @@
  */
 package com.hideki.tracking.vision;
 
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.janelas.Janela;
+import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class Teste {
         Conexao conexao = new Conexao();
         Dados dado = new Dados();
         List<Dados> listaDados = new ArrayList();
+
         
         JdbcTemplate con = conexao.getConnection();
 
@@ -37,15 +41,44 @@ public class Teste {
         System.out.println("\n" + dado);
         
         // INFORMAÇÕES HARDWARE
-        System.out.println("\nINFORMAÇÕES HARDWARE: " + api.getHardware());
-        // INFORMAÇÕES PROCESSOS
-        System.out.println("\nINFORMAÇÕES PROCESSOS: " + api.getProcesso());
+//        System.out.println("\nINFORMAÇÕES HARDWARE: " + api.getHardware());
+//        // INFORMAÇÕES PROCESSOS
+//        System.out.println("\nINFORMAÇÕES PROCESSOS: " + api.getProcesso());
 
         // BANCO DE DADOS
-        con.update("INSERT INTO ---------- VALUES (?, ?);"); //, teste.getNome(), teste.getAnoLancamento());
-        listaDados = con.query("SELECT * FROM -------;", new BeanPropertyRowMapper(Dados.class));
+//        con.update("INSERT INTO ---------- VALUES (?, ?);"); //, teste.getNome(), teste.getAnoLancamento());
+//        listaDados = con.query("SELECT * FROM -------;", new BeanPropertyRowMapper(Dados.class));
 
-        System.out.println(listaDados);
+//        System.out.println(listaDados);
+
+        MaquinaService maquinaService = new MaquinaService();
+
+
+        Maquina maquina = new Maquina(null,api.getSistema().getFabricante(),api.getProcessador().getNome(),api.getProcessador().getFrequencia(),"Memoria",api.getMemoria().getTotal(),api.getDisco().get(0).getNome(),250.0,api.getDisco().get(0).getLeituras(),api.getDisco().get(0).getEscritas());
+
+        maquinaService.salvarMaquina(maquina);
+
+        LogService logService = new LogService();
+        List<String> janelas = new ArrayList();
+        List<Long> janelasPid = new ArrayList();
+        Looca looca = new Looca();
+        JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
+
+        for (int i = 0; i < janelaGrupo.getTotalJanelas(); i++) {
+            if(janelaGrupo.getJanelas().get(i).getTitulo().length() > 0) {
+                janelas.add(janelaGrupo.getJanelas().get(i).getTitulo());
+                janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
+            }
+        }
+        System.out.println(janelas);
+        System.out.println(janelasPid);
+        for (int i = 0; i < janelas.size(); i++) {
+
+            Log log = new Log(null,null, janelasPid.get(i),janelas.get(i) , api.getProcessador().getUso(), api.getDisco().get(i).getTamanho(),api.getMemoriaEmUso());
+            logService.salvarLog(log);
+        }
+
+
 
     }
 
