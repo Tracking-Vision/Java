@@ -1,28 +1,42 @@
 package com.hideki.tracking.vision;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class Maquina {
     private Integer idMaquina;
-    private String marcaMaquina;
+
+
+    private String hostnameMaquina;
+    private Integer status;
     private String nomeModeloCpu;
-    private Long clockCpu;
+    private Double clockCpu;
     private String nomeModeloRam;
-    private Long capacidadeTotalRam;
+    private Double capacidadeTotalRam;
     private String nomeModeloDisco;
     private Double capacidadeTotalDisco;
-    private Long leituraDisco;
-    private Long escritaDisco;
+    private Double leituraDisco;
+    private Double escritaDisco;
+    private Integer fkRede;
+    private Integer fkEmpresa;
+    private Integer fkJanelasBloqueadas;
 
-    public Maquina(Integer idMaquina, String marcaMaquina, String nomeModeloCpu, Long clockCpu, String nomeModeloRam, Long capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Long leiuraDisco, Long escritaDisco) {
+
+    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkRede, Integer fkEmpresa, Integer fkJanelasBloqueadas) {
         this.idMaquina = idMaquina;
-        this.marcaMaquina = marcaMaquina;
+        this.hostnameMaquina = hostnameMaquina;
+        this.status = status;
         this.nomeModeloCpu = nomeModeloCpu;
         this.clockCpu = clockCpu;
         this.nomeModeloRam = nomeModeloRam;
         this.capacidadeTotalRam = capacidadeTotalRam;
         this.nomeModeloDisco = nomeModeloDisco;
         this.capacidadeTotalDisco = capacidadeTotalDisco;
-        this.leituraDisco = leiuraDisco;
+        this.leituraDisco = leituraDisco;
         this.escritaDisco = escritaDisco;
+        this.fkRede = fkRede;
+        this.fkEmpresa = fkEmpresa;
+        this.fkJanelasBloqueadas = fkJanelasBloqueadas;
     }
 
     public Maquina() {
@@ -36,12 +50,20 @@ public class Maquina {
         this.idMaquina = idMaquina;
     }
 
-    public String getMarcaMaquina() {
-        return marcaMaquina;
+    public String getHostnameMaquina() {
+        return hostnameMaquina;
     }
 
-    public void setMarcaMaquina(String marcaMaquina) {
-        this.marcaMaquina = marcaMaquina;
+    public void setHostnameMaquina(String hostnameMaquina) {
+        this.hostnameMaquina = hostnameMaquina;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getNomeModeloCpu() {
@@ -52,11 +74,11 @@ public class Maquina {
         this.nomeModeloCpu = nomeModeloCpu;
     }
 
-    public Long getClockCpu() {
+    public Double getClockCpu() {
         return clockCpu;
     }
 
-    public void setClockCpu(Long clockCpu) {
+    public void setClockCpu(Double clockCpu) {
         this.clockCpu = clockCpu;
     }
 
@@ -68,11 +90,11 @@ public class Maquina {
         this.nomeModeloRam = nomeModeloRam;
     }
 
-    public Long getCapacidadeTotalRam() {
+    public Double getCapacidadeTotalRam() {
         return capacidadeTotalRam;
     }
 
-    public void setCapacidadeTotalRam(Long capacidadeTotalRam) {
+    public void setCapacidadeTotalRam(Double capacidadeTotalRam) {
         this.capacidadeTotalRam = capacidadeTotalRam;
     }
 
@@ -92,37 +114,63 @@ public class Maquina {
         this.capacidadeTotalDisco = capacidadeTotalDisco;
     }
 
-    public Long getLeituraDisco() {
+    public Double getLeituraDisco() {
         return leituraDisco;
     }
 
-    public void setLeituraDisco(Long leiuraDisco) {
-        this.leituraDisco = leiuraDisco;
+    public void setLeituraDisco(Double leituraDisco) {
+        this.leituraDisco = leituraDisco;
     }
 
-    public Long getEscritaDisco() {
+    public Double getEscritaDisco() {
         return escritaDisco;
     }
 
-    public void setEscritaDisco(Long escritaDisco) {
+    public void setEscritaDisco(Double escritaDisco) {
         this.escritaDisco = escritaDisco;
+    }
+
+    public Integer getFkRede() {
+        return fkRede;
+    }
+
+    public void setFkRede(Integer fkRede) {
+        this.fkRede = fkRede;
+    }
+
+    public Integer getFkEmpresa() {
+        return fkEmpresa;
+    }
+
+    public void setFkEmpresa(Integer fkEmpresa) {
+        this.fkEmpresa = fkEmpresa;
+    }
+
+    public Integer getFkJanelasBloqueadas() {
+        return fkJanelasBloqueadas;
+    }
+
+    public void setFkJanelasBloqueadas(Integer fkJanelasBloqueadas) {
+        this.fkJanelasBloqueadas = fkJanelasBloqueadas;
     }
 
     @Override
     public String toString() {
         return "Maquina{" +
                 "idMaquina=" + idMaquina +
-                ", marcaMaquina='" + marcaMaquina + '\'' +
+                ", hostnameMaquina='" + hostnameMaquina + '\'' +
+                ", status=" + status +
                 ", nomeModeloCpu='" + nomeModeloCpu + '\'' +
                 ", clockCpu=" + clockCpu +
                 ", nomeModeloRam='" + nomeModeloRam + '\'' +
                 ", capacidadeTotalRam=" + capacidadeTotalRam +
                 ", nomeModeloDisco='" + nomeModeloDisco + '\'' +
                 ", capacidadeTotalDisco=" + capacidadeTotalDisco +
-                ", leiuraDisco=" + leituraDisco +
+                ", leituraDisco=" + leituraDisco +
                 ", escritaDisco=" + escritaDisco +
+                ", fkRede=" + fkRede +
+                ", fkEmpresa=" + fkEmpresa +
+                ", fkJanelasBloqueadas=" + fkJanelasBloqueadas +
                 '}';
     }
-
-
 }

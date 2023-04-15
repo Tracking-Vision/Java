@@ -8,6 +8,6 @@ public class LogService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        con.update("insert into log values (?, ?, ?, ?, ?, ?, ?,?)", null,log.getHorarioCapturado(), log.getJanelaPid(), log.getTituloJanela(), log.getUsoCpu(), log.getUsoDisco(), log.getUsoRam(), 1);
+        con.update("insert into log(horarioCapturado,janelaPid,tituloJanela,usoCpu,usoDisco,usoRam,fkMaquina,fkLimites) values (?, ?, ?, ?, ?, ?,?,?)", log.getHorarioCapturado(), log.getJanelaPid(), log.getTituloJanela(), log.getUsoCpu(), log.getUsoDisco(), log.getUsoRam(), log.getFkMaquina(),null);
     }
 }

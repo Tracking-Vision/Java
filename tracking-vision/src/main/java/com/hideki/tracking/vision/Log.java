@@ -6,10 +6,13 @@ public class Log {
     private Long janelaPid;
     private String tituloJanela;
     private Double usoCpu;
-    private Long usoDisco;
-    private Long usoRam;
+    private Double usoDisco;
+    private Double usoRam;
 
-    public Log(Integer idLog, String horarioCapturado, Long janelaPid, String tituloJanela, Double usoCpu, Long usoDisco, Long usoRam) {
+    private Integer fkMaquina;
+    private Integer fkLimites;
+
+    public Log(Integer idLog, String horarioCapturado, Long janelaPid, String tituloJanela, Double usoCpu, Double usoDisco, Double usoRam, Integer fkMaquina, Integer fkLimites) {
         this.idLog = idLog;
         this.horarioCapturado = horarioCapturado;
         this.janelaPid = janelaPid;
@@ -17,6 +20,8 @@ public class Log {
         this.usoCpu = usoCpu;
         this.usoDisco = usoDisco;
         this.usoRam = usoRam;
+        this.fkMaquina = fkMaquina;
+        this.fkLimites = fkLimites;
     }
 
     public Log() {
@@ -62,20 +67,51 @@ public class Log {
         this.usoCpu = usoCpu;
     }
 
-    public Long getUsoDisco() {
+    public Double getUsoDisco() {
         return usoDisco;
     }
 
-    public void setUsoDisco(Long usoDisco) {
+    public void setUsoDisco(Double usoDisco) {
         this.usoDisco = usoDisco;
     }
 
-    public Long getUsoRam() {
+    public Double getUsoRam() {
         return usoRam;
     }
 
-    public void setUsoRam(Long usoRam) {
+    public void setUsoRam(Double usoRam) {
         this.usoRam = usoRam;
+    }
+
+    public Integer getFkMaquina() {
+        return fkMaquina;
+    }
+
+    public void setFkMaquina(Integer fkMaquina) {
+        this.fkMaquina = fkMaquina;
+    }
+
+    public Integer getFkLimites() {
+        return fkLimites;
+    }
+
+    public void setFkLimites(Integer fkLimites) {
+        this.fkLimites = fkLimites;
+    }
+
+    @Override
+    public String toString() {
+        return "Log{" +
+                "idLog=" + idLog +
+                ", horarioCapturado='" + horarioCapturado + '\'' +
+                ", janelaPid=" + janelaPid +
+                ", tituloJanela='" + tituloJanela + '\'' +
+                ", usoCpu=" + usoCpu +
+                ", usoDisco=" + usoDisco +
+                ", usoRam=" + usoRam +
+                ", fkMaquina=" + fkMaquina +
+                ", fkLimites=" + fkLimites +
+                '}';
     }
 }
 
