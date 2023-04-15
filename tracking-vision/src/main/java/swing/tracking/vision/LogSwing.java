@@ -238,7 +238,7 @@ public class LogSwing extends javax.swing.JFrame {
                 Double usoRam = Double.valueOf(api.getMemoriaEmUso());
                 usoRam = usoRam / 1073741824.00;
 
-                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+                
 
                 Double finalUsoDisco = usoDisco;
                 Double finalUsoRam = usoRam;
@@ -276,8 +276,9 @@ public class LogSwing extends javax.swing.JFrame {
                         janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
                     }
                 }
-
+                        System.out.println(janelas.size());
                 for (int j = 0; j < janelas.size(); j++) {
+                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, hostname.get(0).getIdMaquina(), 1);
                     logService.salvarLog(log);
 
