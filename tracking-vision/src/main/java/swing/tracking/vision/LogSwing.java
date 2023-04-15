@@ -311,7 +311,7 @@ public class LogSwing extends javax.swing.JFrame {
                 System.out.println("FOR INSERT: " + janelas.size());
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, hostname.get(0).getIdMaquina(), 1);
+                    Log log = new Log(null, timeStamp, janelasPid.get(0), janelas.get(0), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, hostname.get(0).getIdMaquina(), 1);
                     logService.salvarLog(log);
 
                 }
