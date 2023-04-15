@@ -267,16 +267,17 @@ public class LogSwing extends javax.swing.JFrame {
                 new Timer().scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
-//                  
+                        System.out.println("Dentro do timertask");
                 List<String> janelas = new ArrayList();
                 List<Long> janelasPid = new ArrayList();
+                        System.out.println("FOR JANELAS: ");
                 for (int i = 0; i < janelaGrupo.getTotalJanelas(); i++) {
                     if (janelaGrupo.getJanelas().get(i).getTitulo().length() > 0) {
                         janelas.add(janelaGrupo.getJanelas().get(i).getTitulo());
                         janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
                     }
                 }
-                        System.out.println(janelas.size());
+                        System.out.println("FOR INSERT: "+janelas.size());
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, hostname.get(0).getIdMaquina(), 1);
