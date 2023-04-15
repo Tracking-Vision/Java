@@ -181,7 +181,42 @@ public class LogSwing extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        LogService logService = new LogService();
+                MaquinaService maquinaService = new MaquinaService();
 
+                API api = new API();
+                Looca looca = new Looca();
+                Rede rede = looca.getRede();
+                JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
+                DiscoGrupo disco = looca.getGrupoDeDiscos();
+
+                List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+
+                //Frequncia do processador convertida para GHz
+                Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
+                usoDisco = usoDisco / 1073741824.00;
+
+                //Uso da ram to GB
+                Double usoRam = Double.valueOf(api.getMemoriaEmUso());
+                usoRam = usoRam / 1073741824.00;
+                
+                System.out.println("Dentro do timertask");
+                List<String> janelas = new ArrayList();
+                List<Long> janelasPid = new ArrayList();
+                System.out.println("FOR JANELAS: ");
+                for (int i = 0; i < janelaGrupo.getTotalJanelas(); i++) {
+                    if (janelaGrupo.getJanelas().get(i).getTitulo().length() > 0) {
+                        janelas.add(janelaGrupo.getJanelas().get(i).getTitulo());
+                        janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
+                    }
+                }
+                System.out.println("FOR INSERT: " + janelas.size());
+                for (int j = 0; j < janelas.size(); j++) {
+                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), usoDisco, usoRam, hostname.get(0).getIdMaquina(), 1);
+                    logService.salvarLog(log);
+
+                }
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
