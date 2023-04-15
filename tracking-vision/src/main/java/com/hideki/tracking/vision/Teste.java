@@ -116,6 +116,9 @@ public class Teste {
                 janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
             }
         }
+                
+                
+        
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
         //Insert na tabela log
         Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho()-disco.getVolumes().get(0).getDisponivel());

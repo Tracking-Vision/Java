@@ -272,10 +272,10 @@ public class LogSwing extends javax.swing.JFrame {
                 List<String> janelas = new ArrayList();
                 List<Long> janelasPid = new ArrayList();
                         System.out.println("FOR JANELAS: ");
-                for (int i = 0; i < janelaGrupo.getTotalJanelas(); i++) {
+                for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
                     if (janelaGrupo.getJanelas().get(i).getTitulo().length() > 0) {
-                        janelas.add(janelaGrupo.getJanelas().get(i).getTitulo());
-                        janelasPid.add(janelaGrupo.getJanelas().get(i).getPid());
+                        janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
+                        janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
                     }
                 }
                         System.out.println("FOR INSERT: "+janelas.size());
