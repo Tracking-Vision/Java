@@ -264,6 +264,7 @@ public class LogSwing extends javax.swing.JFrame {
 
                 Double finalUsoDisco1 = usoDisco;
                 Double finalUsoRam1 = usoRam;
+                System.out.println("Antes do segundo timertask");
                 new Timer().scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
