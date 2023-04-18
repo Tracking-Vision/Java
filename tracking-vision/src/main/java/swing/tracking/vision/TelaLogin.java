@@ -7,11 +7,14 @@ package swing.tracking.vision;
 import com.github.britooo.looca.api.core.Looca;
 
 import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.hideki.tracking.vision.API;
-
+import com.hideki.tracking.vision.Redes;
 import com.hideki.tracking.vision.FuncionarioService;
 import com.hideki.tracking.vision.Maquina;
 import com.hideki.tracking.vision.MaquinaService;
+import com.hideki.tracking.vision.RedeService;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -140,6 +143,7 @@ public class TelaLogin extends javax.swing.JFrame {
             lblLogin.setText("Login realizado!");
             Looca looca = new Looca();
             MaquinaService maquinaService = new MaquinaService();
+            RedeService redeDao = new RedeService();
             Rede rede = looca.getRede();
 
             Double frequenciaCpu = Double.valueOf(api.getProcessador().getFrequencia());
@@ -158,11 +162,25 @@ public class TelaLogin extends javax.swing.JFrame {
             escritaDisco = escritaDisco / 100000000.00;
 
             List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-
+            List<RedeInterface> redes = new ArrayList();
             if (hostname.isEmpty()) {
-                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, 1, 1, 1);
+
+                for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
+
+                    if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
+
+                        redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
+
+                    }
+                }
+
+                Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac());
+                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, redesCadastrar.getIdRede(), 1, 1);
+
+                redeDao.cadastrarRede(redesCadastrar);
                 maquinaService.salvarMaquina(maquina);
             } else {
+
                 System.out.println("Maquina Ja cadastrada ou houve algum erro");
             }
 

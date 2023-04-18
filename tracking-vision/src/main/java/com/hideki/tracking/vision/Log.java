@@ -8,11 +8,12 @@ public class Log {
     private Double usoCpu;
     private Double usoDisco;
     private Double usoRam;
+    private Long bytesRecebidos;
 
+    private Long bytesEnviados;
     private Integer fkMaquina;
-    private Integer fkLimites;
 
-    public Log(Integer idLog, String horarioCapturado, Long janelaPid, String tituloJanela, Double usoCpu, Double usoDisco, Double usoRam, Integer fkMaquina, Integer fkLimites) {
+    public Log(Integer idLog, String horarioCapturado, Long janelaPid, String tituloJanela, Double usoCpu, Double usoDisco, Double usoRam, Long bytesRecebidos, Long bytesEnviados, Integer fkMaquina) {
         this.idLog = idLog;
         this.horarioCapturado = horarioCapturado;
         this.janelaPid = janelaPid;
@@ -20,8 +21,9 @@ public class Log {
         this.usoCpu = usoCpu;
         this.usoDisco = usoDisco;
         this.usoRam = usoRam;
+        this.bytesRecebidos = bytesRecebidos;
+        this.bytesEnviados = bytesEnviados;
         this.fkMaquina = fkMaquina;
-        this.fkLimites = fkLimites;
     }
 
     public Log() {
@@ -83,20 +85,28 @@ public class Log {
         this.usoRam = usoRam;
     }
 
+    public Long getBytesRecebidos() {
+        return bytesRecebidos;
+    }
+
+    public void setBytesRecebidos(Long bytesRecebidos) {
+        this.bytesRecebidos = bytesRecebidos;
+    }
+
+    public Long getBytesEnviados() {
+        return bytesEnviados;
+    }
+
+    public void setBytesEnviados(Long bytesEnviados) {
+        this.bytesEnviados = bytesEnviados;
+    }
+
     public Integer getFkMaquina() {
         return fkMaquina;
     }
 
     public void setFkMaquina(Integer fkMaquina) {
         this.fkMaquina = fkMaquina;
-    }
-
-    public Integer getFkLimites() {
-        return fkLimites;
-    }
-
-    public void setFkLimites(Integer fkLimites) {
-        this.fkLimites = fkLimites;
     }
 
     @Override
@@ -109,8 +119,9 @@ public class Log {
                 ", usoCpu=" + usoCpu +
                 ", usoDisco=" + usoDisco +
                 ", usoRam=" + usoRam +
+                ", bytesRecebidos=" + bytesRecebidos +
+                ", bytesEnviados=" + bytesEnviados +
                 ", fkMaquina=" + fkMaquina +
-                ", fkLimites=" + fkLimites +
                 '}';
     }
 }

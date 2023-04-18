@@ -130,8 +130,8 @@ public class Teste {
 
         for (int j = 0; j < janelas.size(); j++) {
 
-            Log log = new Log(null, timeStamp, janelasPid.get(j),janelas.get(j) , api.getProcessador().getUso(),usoDisco ,usoRam,maquina.getIdMaquina(),1);
-            logService.salvarLog(log);
+//            Log log = new Log(null, timeStamp, janelasPid.get(j),janelas.get(j) , api.getProcessador().getUso(),usoDisco ,usoRam,maquina.getIdMaquina(),1);
+//            logService.salvarLog(log);
         }
 
 

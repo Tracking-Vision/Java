@@ -8,6 +8,7 @@ import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.hideki.tracking.vision.API;
 import com.hideki.tracking.vision.Log;
 import com.hideki.tracking.vision.LogService;
@@ -53,38 +54,38 @@ public class LogSwing extends javax.swing.JFrame {
         lblDisco = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblRam = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        panelJanela = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel2.setText("Tracking Vision - Log");
 
         panelLog.setBackground(new java.awt.Color(204, 153, 255));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel1.setText("Horario Capturado: ");
 
+        lblHora.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblHora.setText("--");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel3.setText("Uso da CPU: ");
 
+        lblCPu.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblCPu.setText("--");
 
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel4.setText("Uso do Disco: ");
 
+        lblDisco.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblDisco.setText("--");
 
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel5.setText("Uso da Ram: ");
 
+        lblRam.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblRam.setText("--");
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
@@ -108,10 +109,8 @@ public class LogSwing extends javax.swing.JFrame {
                     .addGroup(panelLogLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(lblRam))))
-                .addContainerGap(171, Short.MAX_VALUE))
+                        .addComponent(lblRam)))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,22 +131,7 @@ public class LogSwing extends javax.swing.JFrame {
                 .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(lblRam))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(74, 74, 74))
-        );
-
-        panelJanela.setBackground(new java.awt.Color(204, 102, 255));
-
-        javax.swing.GroupLayout panelJanelaLayout = new javax.swing.GroupLayout(panelJanela);
-        panelJanela.setLayout(panelJanelaLayout);
-        panelJanelaLayout.setHorizontalGroup(
-            panelJanelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
-        );
-        panelJanelaLayout.setVerticalGroup(
-            panelJanelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -155,35 +139,26 @@ public class LogSwing extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(241, 241, 241)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
                 .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelJanela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(134, 134, 134))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelJanela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-// TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -238,8 +213,6 @@ public class LogSwing extends javax.swing.JFrame {
                 Double usoRam = Double.valueOf(api.getMemoriaEmUso());
                 usoRam = usoRam / 1073741824.00;
 
-                
-
                 Double finalUsoDisco = usoDisco;
                 Double finalUsoRam = usoRam;
                 new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -254,37 +227,46 @@ public class LogSwing extends javax.swing.JFrame {
 
                         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 
-                        lblCPu.setText(String.valueOf(api.getProcessadorEmUso()));
-                        lblDisco.setText(String.valueOf(finalUsoDisco));
+                        lblCPu.setText(String.format("%.2f", (api.getProcessadorEmUso())));
+                        lblDisco.setText(String.format("%.2f", (finalUsoDisco)));
                         lblHora.setText(timeStamp);
-                        lblRam.setText(String.valueOf(finalUsoRam));
+                        lblRam.setText(String.format("%.2f", (finalUsoRam)));
                     }
                 }, 0, 5000);
 
-
                 Double finalUsoDisco1 = usoDisco;
                 Double finalUsoRam1 = usoRam;
-                System.out.println("Antes do segundo time");
                 new Timer().scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
                         System.out.println("Dentro do timertask");
-                List<String> janelas = new ArrayList();
-                List<Long> janelasPid = new ArrayList();
+                        List<String> janelas = new ArrayList();
+                        List<Long> janelasPid = new ArrayList();
                         System.out.println("FOR JANELAS: ");
-                for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
-                    if (janelaGrupo.getJanelas().get(i).getTitulo().length() > 0) {
-                        janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
-                        janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
-                    }
-                }
-                        System.out.println("FOR INSERT: "+janelas.size());
-                for (int j = 0; j < janelas.size(); j++) {
-                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, hostname.get(0).getIdMaquina(), 1);
-                    logService.salvarLog(log);
+                        for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
+                            if (janelaGrupo.getJanelasVisiveis().get(i).getTitulo().length() > 0) {
+                                janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
+                                janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
+                            }
+                        }
+                        System.out.println("FOR INSERT: " + janelas.size());
+                        List<RedeInterface> redes = new ArrayList();
 
-                }
+                        for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
+
+                            if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
+
+                                redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
+
+                            }
+                        }
+
+                        for (int j = 0; j < janelas.size(); j++) {
+                            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+                            Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, redes.get(0).getBytesRecebidos(), redes.get(0).getBytesEnviados(), hostname.get(0).getIdMaquina());
+                            logService.salvarLog(log);
+
+                        }
                     }
                 }, 0, 60000);
             }
@@ -292,7 +274,6 @@ public class LogSwing extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -302,7 +283,6 @@ public class LogSwing extends javax.swing.JFrame {
     private static javax.swing.JLabel lblDisco;
     private static javax.swing.JLabel lblHora;
     private static javax.swing.JLabel lblRam;
-    private javax.swing.JPanel panelJanela;
     private javax.swing.JPanel panelLog;
     // End of variables declaration//GEN-END:variables
 }
