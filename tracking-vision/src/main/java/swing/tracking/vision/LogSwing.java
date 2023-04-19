@@ -30,9 +30,86 @@ public class LogSwing extends javax.swing.JFrame {
      * Creates new form Log
      */
     public LogSwing() {
-
         initComponents();
+        capturaDados();
+    }
 
+    private void capturaDados() {
+        LogService logService = new LogService();
+        MaquinaService maquinaService = new MaquinaService();
+
+        API api = new API();
+        Looca looca = new Looca();
+        Rede rede = looca.getRede();
+        JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
+        DiscoGrupo disco = looca.getGrupoDeDiscos();
+
+        List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+
+        //Frequncia do processador convertida para GHz
+        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
+        usoDisco = usoDisco / 1073741824.00;
+
+        //Uso da ram to GB
+        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
+        usoRam = usoRam / 1073741824.00;
+
+        Double finalUsoDisco = usoDisco;
+        Double finalUsoRam = usoRam;
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+//                        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
+//                        usoDisco = usoDisco / 1073741824.00;
+//
+//                        //Uso da ram to GB
+//                        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
+//                        usoRam = usoRam / 1073741824.00;
+
+                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+
+                lblCPu.setText(String.format("%.2f", (api.getProcessadorEmUso())));
+                lblDisco.setText(String.format("%.2f", (finalUsoDisco)));
+                lblHora.setText(timeStamp);
+                lblRam.setText(String.format("%.2f", (finalUsoRam)));
+            }
+        }, 0, 5000);
+
+        Double finalUsoDisco1 = usoDisco;
+        Double finalUsoRam1 = usoRam;
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Dentro do timertask");
+                List<String> janelas = new ArrayList();
+                List<Long> janelasPid = new ArrayList();
+                System.out.println("FOR JANELAS: ");
+                for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
+                    if (janelaGrupo.getJanelasVisiveis().get(i).getTitulo().length() > 0) {
+                        janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
+                        janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
+                    }
+                }
+                System.out.println("FOR INSERT: " + janelas.size());
+                List<RedeInterface> redes = new ArrayList();
+
+                for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
+
+                    if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
+
+                        redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
+
+                    }
+                }
+
+                for (int j = 0; j < janelas.size(); j++) {
+                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, redes.get(0).getBytesRecebidos(), redes.get(0).getBytesEnviados(), hostname.get(0).getIdMaquina());
+                    logService.salvarLog(log);
+
+                }
+            }
+        }, 0, 60000);
     }
 
     /**
@@ -140,7 +217,7 @@ public class LogSwing extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -153,7 +230,7 @@ public class LogSwing extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
                 .addGap(31, 31, 31)
-                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -194,81 +271,6 @@ public class LogSwing extends javax.swing.JFrame {
             public void run() {
                 new LogSwing().setVisible(true);
 
-                LogService logService = new LogService();
-                MaquinaService maquinaService = new MaquinaService();
-
-                API api = new API();
-                Looca looca = new Looca();
-                Rede rede = looca.getRede();
-                JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
-                DiscoGrupo disco = looca.getGrupoDeDiscos();
-
-                List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-
-                //Frequncia do processador convertida para GHz
-                Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-                usoDisco = usoDisco / 1073741824.00;
-
-                //Uso da ram to GB
-                Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-                usoRam = usoRam / 1073741824.00;
-
-                Double finalUsoDisco = usoDisco;
-                Double finalUsoRam = usoRam;
-                new Timer().scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-//                        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-//                        usoDisco = usoDisco / 1073741824.00;
-//
-//                        //Uso da ram to GB
-//                        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-//                        usoRam = usoRam / 1073741824.00;
-
-                        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-
-                        lblCPu.setText(String.format("%.2f", (api.getProcessadorEmUso())));
-                        lblDisco.setText(String.format("%.2f", (finalUsoDisco)));
-                        lblHora.setText(timeStamp);
-                        lblRam.setText(String.format("%.2f", (finalUsoRam)));
-                    }
-                }, 0, 5000);
-
-                Double finalUsoDisco1 = usoDisco;
-                Double finalUsoRam1 = usoRam;
-                new Timer().scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("Dentro do timertask");
-                        List<String> janelas = new ArrayList();
-                        List<Long> janelasPid = new ArrayList();
-                        System.out.println("FOR JANELAS: ");
-                        for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
-                            if (janelaGrupo.getJanelasVisiveis().get(i).getTitulo().length() > 0) {
-                                janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
-                                janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
-                            }
-                        }
-                        System.out.println("FOR INSERT: " + janelas.size());
-                        List<RedeInterface> redes = new ArrayList();
-
-                        for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
-
-                            if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
-
-                                redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
-
-                            }
-                        }
-
-                        for (int j = 0; j < janelas.size(); j++) {
-                            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-                            Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, redes.get(0).getBytesRecebidos(), redes.get(0).getBytesEnviados(), hostname.get(0).getIdMaquina());
-                            logService.salvarLog(log);
-
-                        }
-                    }
-                }, 0, 60000);
             }
         });
     }
@@ -280,7 +282,7 @@ public class LogSwing extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private static javax.swing.JLabel lblCPu;
-    private static javax.swing.JLabel lblDisco;
+    private static  javax.swing.JLabel lblDisco;
     private static javax.swing.JLabel lblHora;
     private static javax.swing.JLabel lblRam;
     private javax.swing.JPanel panelLog;
