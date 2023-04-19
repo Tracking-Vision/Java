@@ -175,9 +175,12 @@ public class TelaLogin extends javax.swing.JFrame {
                 }
 
                 Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac());
-                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, redesCadastrar.getIdRede(), 1, 1);
-
                 redeDao.cadastrarRede(redesCadastrar);
+
+                System.out.println(redeDao.retornarIdRede(redesCadastrar));
+                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, redeDao.retornarIdRede(redesCadastrar), 1, 1);
+
+                
                 maquinaService.salvarMaquina(maquina);
             } else {
 
