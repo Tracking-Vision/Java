@@ -17,7 +17,7 @@ public class RedeService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        con.update("insert into rede(nomeRede,nomeExibicao,ipv4,mac) values (?, ?, ?, ?)", rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac());
+        con.update("insert into placaRede(nomeRede,nomeExibicao,ipv4,mac,fkMaquina) values (?, ?, ?, ?,?)", rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac(),rede.getFkMaquina());
     }
 
     public Integer retornarIdRede (Redes rede) {

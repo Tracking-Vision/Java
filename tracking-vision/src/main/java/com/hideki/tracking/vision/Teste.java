@@ -96,9 +96,10 @@ public class Teste {
         DiscoGrupo disco = looca.getGrupoDeDiscos();
 
 
+        System.out.println(rede.getGrupoDeInterfaces().getInterfaces());
+        System.out.println(rede.getParametros());
 
-
-        Maquina maquina = new Maquina(null,rede.getParametros().getHostName(),1,api.getProcessador().getNome(),frequenciaCpu,"Memoria",capRam,api.getDisco().get(0).getModelo(),capDisco,leituraDisco,escritaDisco,1,1,1);
+        Maquina maquina = new Maquina(null,rede.getParametros().getHostName(),1,api.getProcessador().getNome(),frequenciaCpu,"Memoria",capRam,api.getDisco().get(0).getModelo(),capDisco,leituraDisco,escritaDisco,1,1);
 
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
         System.out.println("ID " +hostname.get(0).getIdMaquina());

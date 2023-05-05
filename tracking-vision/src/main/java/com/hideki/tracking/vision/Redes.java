@@ -14,13 +14,15 @@ public class Redes {
     private String nomeExibicao;
     private String ipv4;
     private String mac;
+    private Integer fkMaquina;
 
-    public Redes(Integer idRede, String nomeRede, String nomeExibicao, String ipv4, String mac) {
+    public Redes(Integer idRede, String nomeRede, String nomeExibicao, String ipv4, String mac, Integer fkMaquina) {
         this.idRede = idRede;
         this.nomeRede = nomeRede;
         this.nomeExibicao = nomeExibicao;
         this.ipv4 = ipv4;
         this.mac = mac;
+        this.fkMaquina = fkMaquina;
     }
 
     public Redes() {
@@ -64,6 +66,14 @@ public class Redes {
 
     public void setMac(String mac) {
         this.mac = mac;
+    }
+
+    public Integer getFkMaquina() {
+        return fkMaquina;
+    }
+
+    public void setFkMaquina(Integer fkMaquina) {
+        this.fkMaquina = fkMaquina;
     }
 
     @Override

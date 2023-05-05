@@ -13,4 +13,12 @@ public class FuncionarioService {
 
         return con.query("select * from funcionario where email = ? and senha = ?", new BeanPropertyRowMapper(Funcionario.class), email, senha);
     }
+
+    public Integer retornarFkEmpresa(String email, String senha) {
+        Conexao conexao = new Conexao();
+
+        JdbcTemplate con = conexao.getConnection();
+
+        return con.queryForObject("select fkEmpresa from funcionario where email = ? and senha = ?", Integer.class, email, senha);
+    }
 }

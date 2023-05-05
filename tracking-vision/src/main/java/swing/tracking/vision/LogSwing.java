@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JOptionPane;
+import java.io.IOException;
 
 /**
  *
@@ -54,27 +56,26 @@ public class LogSwing extends javax.swing.JFrame {
         Double usoRam = Double.valueOf(api.getMemoriaEmUso());
         usoRam = usoRam / 1073741824.00;
 
-        Double finalUsoDisco = usoDisco;
-        Double finalUsoRam = usoRam;
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-//                        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-//                        usoDisco = usoDisco / 1073741824.00;
+//        Double finalUsoDisco = usoDisco;
+//        Double finalUsoRam = usoRam;
+//        new Timer().scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+////                        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
+////                        usoDisco = usoDisco / 1073741824.00;
+////
+////                        //Uso da ram to GB
+////                        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
+////                        usoRam = usoRam / 1073741824.00;
 //
-//                        //Uso da ram to GB
-//                        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-//                        usoRam = usoRam / 1073741824.00;
-
-                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-
-                lblCPu.setText(String.format("%.2f", (api.getProcessadorEmUso())));
-                lblDisco.setText(String.format("%.2f", (finalUsoDisco)));
-                lblHora.setText(timeStamp);
-                lblRam.setText(String.format("%.2f", (finalUsoRam)));
-            }
-        }, 0, 5000);
-
+//                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+//
+//                lblCPu.setText(String.format("%.2f %%", (api.getProcessadorEmUso())));
+//                lblDisco.setText(String.format("%.2f GB", (finalUsoDisco)));
+//                lblHora.setText(timeStamp);
+//                lblRam.setText(String.format("%.2f GB", (finalUsoRam)));
+//            }
+//        }, 0, 5000);
         Double finalUsoDisco1 = usoDisco;
         Double finalUsoRam1 = usoRam;
         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -91,7 +92,7 @@ public class LogSwing extends javax.swing.JFrame {
                     }
                 }
                 System.out.println("FOR INSERT: " + janelas.size());
-                List<RedeInterface> redes = new ArrayList();
+                List<RedeInterface> redes = new ArrayList<>();
 
                 for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
 
@@ -104,8 +105,18 @@ public class LogSwing extends javax.swing.JFrame {
 
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, redes.get(0).getBytesRecebidos(), redes.get(0).getBytesEnviados(), hostname.get(0).getIdMaquina());
+                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
+                    System.out.println(log.toString());
                     logService.salvarLog(log);
+                    System.out.println(janelas.get(j));
+                    if (janelas.get(j).toLowerCase().contains("chrome")) {
+                        JOptionPane.showMessageDialog(null, "seu computador sera desligado");
+                        try {
+                            Runtime.getRuntime().exec("shutdown -s -t 120");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 
                 }
             }
@@ -121,133 +132,53 @@ public class LogSwing extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         panelLog = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        lblHora = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblCPu = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        lblDisco = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblRam = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel2.setText("Tracking Vision - Log");
-
         panelLog.setBackground(new java.awt.Color(204, 153, 255));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setText("Horario Capturado: ");
+        jLabel7.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel7.setText("Os dados da maquina estão sendo capturados e armazenados.");
 
-        lblHora.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblHora.setText("--");
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel3.setText("Uso da CPU: ");
-
-        lblCPu.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblCPu.setText("--");
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel4.setText("Uso do Disco: ");
-
-        lblDisco.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblDisco.setText("--");
-
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel5.setText("Uso da Ram: ");
-
-        lblRam.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblRam.setText("--");
-
-        jLabel7.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
-        jLabel7.setText("A inserção desses dados na nuvem ocorrem a cada minuto");
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel2.setText("Tracking Vision - Log");
 
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
         panelLogLayout.setHorizontalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(95, 95, 95))
             .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addGroup(panelLogLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDisco))
-                    .addGroup(panelLogLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCPu))
-                    .addGroup(panelLogLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblHora))
-                    .addGroup(panelLogLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRam)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addComponent(jLabel7)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(lblHora))
-                .addGap(29, 29, 29)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(lblCPu))
-                .addGap(28, 28, 28)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(lblDisco))
-                .addGap(27, 27, 27)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(lblRam))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(jLabel7))
+                .addGap(83, 83, 83)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addGap(69, 69, 69))
         );
-
-        jLabel6.setText("Dados atualizados a cada 5 segundos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(174, 174, 174))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(130, 130, 130)))
-                .addContainerGap())
+            .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -285,6 +216,7 @@ public class LogSwing extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
                 new LogSwing().setVisible(true);
 
             }
@@ -292,17 +224,8 @@ public class LogSwing extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel lblCPu;
-    private javax.swing.JLabel lblDisco;
-    private javax.swing.JLabel lblHora;
-    private javax.swing.JLabel lblRam;
     private javax.swing.JPanel panelLog;
     // End of variables declaration//GEN-END:variables
 }

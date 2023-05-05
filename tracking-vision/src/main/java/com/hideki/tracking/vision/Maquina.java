@@ -5,8 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class Maquina {
     private Integer idMaquina;
-
-
     private String hostnameMaquina;
     private Integer status;
     private String nomeModeloCpu;
@@ -17,12 +15,11 @@ public class Maquina {
     private Double capacidadeTotalDisco;
     private Double leituraDisco;
     private Double escritaDisco;
-    private Integer fkRede;
     private Integer fkEmpresa;
     private Integer fkJanelasBloqueadas;
 
 
-    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkRede, Integer fkEmpresa, Integer fkJanelasBloqueadas) {
+    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkEmpresa, Integer fkJanelasBloqueadas) {
         this.idMaquina = idMaquina;
         this.hostnameMaquina = hostnameMaquina;
         this.status = status;
@@ -34,7 +31,6 @@ public class Maquina {
         this.capacidadeTotalDisco = capacidadeTotalDisco;
         this.leituraDisco = leituraDisco;
         this.escritaDisco = escritaDisco;
-        this.fkRede = fkRede;
         this.fkEmpresa = fkEmpresa;
         this.fkJanelasBloqueadas = fkJanelasBloqueadas;
     }
@@ -130,13 +126,6 @@ public class Maquina {
         this.escritaDisco = escritaDisco;
     }
 
-    public Integer getFkRede() {
-        return fkRede;
-    }
-
-    public void setFkRede(Integer fkRede) {
-        this.fkRede = fkRede;
-    }
 
     public Integer getFkEmpresa() {
         return fkEmpresa;
@@ -168,7 +157,6 @@ public class Maquina {
                 ", capacidadeTotalDisco=" + capacidadeTotalDisco +
                 ", leituraDisco=" + leituraDisco +
                 ", escritaDisco=" + escritaDisco +
-                ", fkRede=" + fkRede +
                 ", fkEmpresa=" + fkEmpresa +
                 ", fkJanelasBloqueadas=" + fkJanelasBloqueadas +
                 '}';
