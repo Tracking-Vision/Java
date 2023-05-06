@@ -106,8 +106,10 @@ public class LogSwing extends javax.swing.JFrame {
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
+                   
                     System.out.println(log.toString());
                     logService.salvarLog(log);
+                    logService.salvarLogMysql(log);
                     System.out.println(janelas.get(j));
                     if (janelas.get(j).toLowerCase().contains("chrome")) {
                         JOptionPane.showMessageDialog(null, "seu computador sera desligado");
