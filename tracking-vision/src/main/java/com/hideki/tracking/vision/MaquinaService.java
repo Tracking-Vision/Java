@@ -8,11 +8,13 @@ import java.util.List;
 public class MaquinaService {
     public void salvarMaquina (Maquina maquina) {
         Conexao conexao = new Conexao();
+        ConexaoMysql conexaoMysql = new ConexaoMysql();
 
         JdbcTemplate con = conexao.getConnection();
+        JdbcTemplate conMysql = conexaoMysql.getConnection();
 
         con.update("insert into maquina(status,hostnameMaquina,nomeModeloCpu,clockCpu,nomeModeloRam,capacidadeTotalRam,nomeModeloDisco,capacidadeTotalDisco,leituraDisco,escritaDisco,fkEmpresa,fkJanelasBloqueadas) values (?,?,?,?,?,?,?,?,?,?,?,?)", 1,maquina.getHostnameMaquina(), maquina.getNomeModeloCpu(), maquina.getClockCpu(), maquina.getNomeModeloRam(), maquina.getCapacidadeTotalRam(), maquina.getNomeModeloDisco(), maquina.getCapacidadeTotalDisco(), maquina.getLeituraDisco(), maquina.getEscritaDisco(),null,null);
-
+        conMysql.update("insert into maquina(status,hostnameMaquina,nomeModeloCpu,clockCpu,nomeModeloRam,capacidadeTotalRam,nomeModeloDisco,capacidadeTotalDisco,leituraDisco,escritaDisco,fkEmpresa,fkJanelasBloqueadas) values (?,?,?,?,?,?,?,?,?,?,?,?)", 1,maquina.getHostnameMaquina(), maquina.getNomeModeloCpu(), maquina.getClockCpu(), maquina.getNomeModeloRam(), maquina.getCapacidadeTotalRam(), maquina.getNomeModeloDisco(), maquina.getCapacidadeTotalDisco(), maquina.getLeituraDisco(), maquina.getEscritaDisco(),null,null);
     }
 
     public List<Maquina> buscarPeloHostname(String hostname) {
