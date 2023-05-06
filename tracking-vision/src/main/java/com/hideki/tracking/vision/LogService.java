@@ -9,7 +9,7 @@ public class LogService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        return con.queryForObject("select idLog from log where horarioCapturado = ? and fkMaquina= ? ", Integer.class, log.getHorarioCapturado(), log.getFkMaquina());
+        return con.queryForObject("select idLog from log where horarioCapturado = ? and fkMaquina= ? and janelaPid = ? ", Integer.class, log.getHorarioCapturado(), log.getFkMaquina(), log.getJanelaPid());
       }
     public void salvarLog(Log log) {
         Conexao conexao = new Conexao();
