@@ -111,7 +111,7 @@ public class LogSwing extends javax.swing.JFrame {
                     logService.salvarLog(log);
                     logService.salvarLogMysql(log);
                     System.out.println(janelas.get(j));
-                    if (janelas.get(j).toLowerCase().contains("chrome")) {
+                    if (janelas.get(j).toLowerCase().contains("quaz")) {
                         JOptionPane.showMessageDialog(null, "seu computador sera desligado");
                         try {
                             Runtime.getRuntime().exec("shutdown -s -t 120");
