@@ -9,17 +9,16 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
-import com.hideki.tracking.vision.API;
-import com.hideki.tracking.vision.Log;
-import com.hideki.tracking.vision.LogService;
-import com.hideki.tracking.vision.Maquina;
-import com.hideki.tracking.vision.MaquinaService;
+import com.hideki.tracking.vision.*;
+//importar logger
+
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -31,10 +30,13 @@ public class LogSwing extends javax.swing.JFrame {
     /**
      * Creates new form Log
      */
-    public LogSwing() {
+    public LogSwing() throws IOException {
         initComponents();
         capturaDados();
+        setLocationRelativeTo(null);
+//        sendMessage.sendMessage("Sistema iniciado");
     }
+//    SendMessage sendMessage = new SendMessage();
 
     private void capturaDados() {
         LogService logService = new LogService();
@@ -49,49 +51,26 @@ public class LogSwing extends javax.swing.JFrame {
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
 
         //Frequncia do processador convertida para GHz
-        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
+        Double usoDisco = (double) (api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
         usoDisco = usoDisco / 1073741824.00;
 
         //Uso da ram to GB
         Double usoRam = Double.valueOf(api.getMemoriaEmUso());
         usoRam = usoRam / 1073741824.00;
-
-//        Double finalUsoDisco = usoDisco;
-//        Double finalUsoRam = usoRam;
-//        new Timer().scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-////                        Double usoDisco = Double.valueOf(api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-////                        usoDisco = usoDisco / 1073741824.00;
-////
-////                        //Uso da ram to GB
-////                        Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-////                        usoRam = usoRam / 1073741824.00;
-//
-//                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-//
-//                lblCPu.setText(String.format("%.2f %%", (api.getProcessadorEmUso())));
-//                lblDisco.setText(String.format("%.2f GB", (finalUsoDisco)));
-//                lblHora.setText(timeStamp);
-//                lblRam.setText(String.format("%.2f GB", (finalUsoRam)));
-//            }
-//        }, 0, 5000);
         Double finalUsoDisco1 = usoDisco;
         Double finalUsoRam1 = usoRam;
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Dentro do timertask");
-                List<String> janelas = new ArrayList();
-                List<Long> janelasPid = new ArrayList();
-                System.out.println("FOR JANELAS: ");
+                List<String> janelas = new ArrayList<>();
+                List<Long> janelasPid = new ArrayList<>();
+
                 for (int i = 0; i < janelaGrupo.getTotalJanelasVisiveis(); i++) {
                     if (janelaGrupo.getJanelasVisiveis().get(i).getTitulo().length() > 0) {
                         janelas.add(janelaGrupo.getJanelasVisiveis().get(i).getTitulo());
                         janelasPid.add(janelaGrupo.getJanelasVisiveis().get(i).getPid());
                     }
                 }
-                System.out.println("FOR INSERT: " + janelas.size());
                 List<RedeInterface> redes = new ArrayList<>();
 
                 for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
@@ -99,6 +78,7 @@ public class LogSwing extends javax.swing.JFrame {
                     if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
 
                         redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
+                        break;
 
                     }
                 }
@@ -109,9 +89,7 @@ public class LogSwing extends javax.swing.JFrame {
                    
                     System.out.println(log.toString());
                     logService.salvarLog(log);
-                    logService.salvarLogMysql(log);
-                    System.out.println(janelas.get(j));
-                    if (janelas.get(j).toLowerCase().contains("quaz")) {
+                    if (janelas.get(j).toLowerCase().contains("chrome")) {
                         JOptionPane.showMessageDialog(null, "seu computador sera desligado");
                         try {
                             Runtime.getRuntime().exec("shutdown -s -t 120");
@@ -122,7 +100,7 @@ public class LogSwing extends javax.swing.JFrame {
 
                 }
             }
-        }, 0, 60000);
+        }, 0, 20000);
     }
 
     /**
@@ -137,54 +115,84 @@ public class LogSwing extends javax.swing.JFrame {
         panelLog = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        btnSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        panelLog.setBackground(new java.awt.Color(204, 153, 255));
+        panelLog.setBackground(new java.awt.Color(188, 76, 228));
 
-        jLabel7.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
         jLabel7.setText("Os dados da maquina estão sendo capturados e armazenados.");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Bahnschrift", 1, 48)); // NOI18N
         jLabel2.setText("Tracking Vision - Log");
+
+        btnSair.setBackground(new java.awt.Color(102, 0, 102));
+        btnSair.setFont(new java.awt.Font("Bahnschrift", 1, 18)); // NOI18N
+        btnSair.setForeground(new java.awt.Color(255, 255, 255));
+        btnSair.setText("Parar Captura");
+        btnSair.setBorder(null);
+        btnSair.setBorderPainted(false);
+        btnSair.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnSair.setFocusPainted(false);
+        btnSair.setFocusable(false);
+        btnSair.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
         panelLogLayout.setHorizontalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
             .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(189, 189, 189)
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
+                .addContainerGap(113, Short.MAX_VALUE)
                 .addComponent(jLabel7)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(53, 53, 53))
+            .addGroup(panelLogLayout.createSequentialGroup()
+                .addGap(336, 336, 336)
+                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel7)
-                .addGap(69, 69, 69))
+                .addGap(42, 42, 42)
+                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,16 +224,17 @@ public class LogSwing extends javax.swing.JFrame {
 
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
                 new LogSwing().setVisible(true);
-
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSair;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel panelLog;

@@ -18,7 +18,7 @@ public class ConexaoMysql {
         BasicDataSource dataSource = new BasicDataSource();
 
        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/track?autoReconnect=true&useSSL=false");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/track");
         dataSource.setUsername("root");
         dataSource.setPassword("paulo1421");
 
