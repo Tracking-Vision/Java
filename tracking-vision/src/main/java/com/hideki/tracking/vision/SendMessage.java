@@ -9,6 +9,7 @@ import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.io.IOException;
  */
 public class SendMessage {
 
-    private String webHookUrl = "https://hooks.slack.com/services/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";
+    private String webHookUrl = "https://hooks.slack.com/services/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";
     private String channel = "geral";
     public void sendMessage(String message) throws IOException {
         try {
@@ -32,5 +33,52 @@ public class SendMessage {
             System.out.printf("Erro ao enviar mensagem: %s", e.getMessage());
         }
 
+    }
+
+    public void mandarMensagemAviso(List<Limites> limites, Log log) throws IOException {
+        Double uso = null;
+        sendMessage("Aviso");
+        for (int i = 0; i < limites.size(); i++) {
+            if (limites.get(i).getTipo().equalsIgnoreCase("CPU")) {
+                uso = log.getUsoCpu();
+            } else if (limites.get(i).getTipo().equalsIgnoreCase("RAM")) {
+                uso = log.getUsoRam();
+            } else if (limites.get(i).getTipo().equalsIgnoreCase("DISCO")) {
+                uso = log.getUsoDisco();
+            } else {
+                uso = null;
+            }
+
+            if (uso <= limites.get(i).getOk()) {
+                System.out.println("Dentro do limite");
+                try {
+                    sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está dentro do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getOk()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (uso > limites.get(i).getOk() && uso <= limites.get(i).getAviso()) {
+                System.out.println("Acima do limite");
+                try {
+                    sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está acima do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getOk()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (uso > limites.get(i).getAviso() && uso <= limites.get(i).getPerigo()) {
+                System.out.println("Acima do limite");
+                try {
+                    sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está acima do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getAviso()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (uso > limites.get(i).getPerigo()) {
+                System.out.println("Acima do limite");
+                try {
+                    sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está acima do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getPerigo()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }

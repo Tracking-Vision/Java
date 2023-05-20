@@ -12,7 +12,6 @@ import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.hideki.tracking.vision.*;
 //importar logger
 
-import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,21 +85,35 @@ public class LogSwing extends javax.swing.JFrame {
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
-                   
+
                     System.out.println(log.toString());
                     logService.salvarLog(log);
-                    if (janelas.get(j).toLowerCase().contains("chrome")) {
-                        JOptionPane.showMessageDialog(null, "seu computador sera desligado");
-                        try {
-                            Runtime.getRuntime().exec("shutdown -s -t 120");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
 
+                    LimitesService limitesService = new LimitesService();
+                    List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
+                    SendMessage sendMessage = new SendMessage();
+                    try {
+                        sendMessage.mandarMensagemAviso(limites, log);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    JanelasBloqueadasService janelasBloqueadasService = new JanelasBloqueadasService();
+                    List<JanelasBloqueadas> janelasBloqueadasList = janelasBloqueadasService.retornarJanelasBloqueadas(hostname.get(0).getFkEmpresa());
+
+                    for (JanelasBloqueadas janelasBloqueadas : janelasBloqueadasList) {
+                        if (janelas.get(j).toLowerCase().contains(janelasBloqueadas.getNome().toLowerCase())) {
+                            JOptionPane.showMessageDialog(null, "seu computador sera desligado");
+                            try {
+                                Runtime.getRuntime().exec("shutdown -s -t 120");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                    }
                 }
             }
-        }, 0, 20000);
+        }, 0, 60000);
     }
 
     /**
