@@ -18,7 +18,7 @@ public class Dados {
     private Long bytesEnviados;
     private Long bytesRecebidos;
     private Long janelaId;
-
+    //qq
     public Dados() {
         API api = new API();
         id = null;
