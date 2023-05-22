@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SendMessage {
 
-    private String webHookUrl = "https://hooks.slack.com/services/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";
+    private String webHookUrl = "https://hooks.slack.com/services/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";
     private String channel = "geral";
     public void sendMessage(String message) throws IOException {
         try {
@@ -37,7 +37,7 @@ public class SendMessage {
 
     public void mandarMensagemAviso(List<Limites> limites, Log log) throws IOException {
         Double uso = null;
-        sendMessage("Aviso");
+//        sendMessage("Aviso");
         for (int i = 0; i < limites.size(); i++) {
             if (limites.get(i).getTipo().equalsIgnoreCase("CPU")) {
                 uso = log.getUsoCpu();
