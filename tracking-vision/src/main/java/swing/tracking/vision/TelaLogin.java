@@ -8,16 +8,13 @@ import com.github.britooo.looca.api.core.Looca;
 
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
-import com.hideki.tracking.vision.API;
-import com.hideki.tracking.vision.Redes;
-import com.hideki.tracking.vision.FuncionarioService;
-import com.hideki.tracking.vision.Maquina;
-import com.hideki.tracking.vision.MaquinaService;
-import com.hideki.tracking.vision.RedeService;
+import com.hideki.tracking.vision.*;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 //import Logger
 
@@ -127,7 +124,11 @@ public class TelaLogin extends javax.swing.JFrame {
         btnLogin.setFocusPainted(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                try {
+                    btnLoginActionPerformed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -215,7 +216,7 @@ public class TelaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLoginActionPerformed
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String login = txtLogin.getText();
         String senha = txtSenha.getText();
@@ -225,15 +226,20 @@ public class TelaLogin extends javax.swing.JFrame {
 
         if (!funcDao.login(login, senha).isEmpty()) {
             lblLogin.setText("Login realizado com sucesso!");
-
-            Looca looca = new Looca();
             MaquinaService maquinaService = new MaquinaService();
-            RedeService redeDao = new RedeService();
+            Looca looca = new Looca();
             Rede rede = looca.getRede();
-
-
-
             List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+            Logs logs = new Logs();
+            logs.generateLoginSucesso(login, hostname);
+
+
+            RedeService redeDao = new RedeService();
+
+
+
+
+            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
             List<RedeInterface> redes = new ArrayList<>();
             if (hostname.isEmpty()) {
                 lblLogin.setText("Cadastrando maquina...");
