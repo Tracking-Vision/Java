@@ -34,7 +34,7 @@ public class Logs {
 
         else {
 
-            path = Paths.get("/home");
+            path = Paths.get("/home/$USER/");
 
         }
 
