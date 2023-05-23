@@ -34,7 +34,7 @@ public class Logs {
 
         else {
 
-            path = Paths.get("/home/Logs-tracking-vision/");
+            path = Paths.get("/home/$USER/");
 
         }
 
