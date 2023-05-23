@@ -225,6 +225,7 @@ public class TelaLogin extends javax.swing.JFrame {
         API api = new API();
 
         if (!funcDao.login(login, senha).isEmpty()) {
+            //log login
             lblLogin.setText("Login realizado com sucesso!");
             MaquinaService maquinaService = new MaquinaService();
             Looca looca = new Looca();
