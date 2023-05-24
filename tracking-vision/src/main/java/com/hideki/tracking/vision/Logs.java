@@ -50,7 +50,7 @@ public class Logs {
 
         }
         System.out.println(dataFormatada);
-        File log = new File (String.format("C:/Logs-tracking-vision/%s.txt ",dataFormatada));
+        File log = new File (String.format(dataFormatada));
 
         if (!log.exists()) {
 
