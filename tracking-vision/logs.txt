@@ -1,0 +1,2 @@
+[2023-05-23 21:34:53] Login realizado com sucesso!
+[2023-05-23 21:37:24] Login realizado com esso!

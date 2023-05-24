@@ -231,8 +231,8 @@ public class TelaLogin extends javax.swing.JFrame {
             Looca looca = new Looca();
             Rede rede = looca.getRede();
             List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-            Logs logs = new Logs();
-            logs.generateLoginSucesso(login, hostname);
+            Logs logs = new Logs("logs.txt");
+            logs.log("Login realizado com esso!");
 
 
             RedeService redeDao = new RedeService();
