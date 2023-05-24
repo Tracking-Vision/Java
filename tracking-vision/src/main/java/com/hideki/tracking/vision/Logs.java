@@ -43,10 +43,10 @@ public class Logs {
         String msg = horario + " - " + email + " - " + hostname.get(0).getHostnameMaquina() + " - " + "Login realizado com sucesso";
 
 
-
+        path = Paths.get("/home/ubuntu/Desktop/Logs");
         if (!Files.exists(path)) {
-            path = Paths.get("/home/ubuntu/Desktop/Logs");
-            System.out.println("oi");
+
+
             Files.createDirectory(path);
 
         }
