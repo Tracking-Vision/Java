@@ -46,6 +46,7 @@ public class Logs {
 
         if (!Files.exists(path)) {
             path = Paths.get("/home/ubuntu/Desktop/Logs");
+            System.out.println("oi");
             Files.createDirectory(path);
 
         }
