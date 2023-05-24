@@ -35,6 +35,7 @@ public class Logs {
         else {
 
             path = Paths.get("/home/$USER/Desktop/");
+            System.out.println(path);
 
         }
 
@@ -44,7 +45,7 @@ public class Logs {
 
 
         if (!Files.exists(path)) {
-
+            System.out.println("teste");
             Files.createDirectory(path);
 
         }
