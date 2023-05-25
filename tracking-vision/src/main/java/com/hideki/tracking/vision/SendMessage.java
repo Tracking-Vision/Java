@@ -39,6 +39,7 @@ public class SendMessage {
         Double uso = null;
         System.out.println("Entrou no método");
         for (int i = 0; i < limites.size(); i++) {
+            System.out.println("TESTE 1");
             if (limites.get(i).getTipo().equalsIgnoreCase("CPU")) {
                 uso = log.getUsoCpu();
             } else if (limites.get(i).getTipo().equalsIgnoreCase("RAM")) {
@@ -48,7 +49,7 @@ public class SendMessage {
             } else {
                 uso = null;
             }
-
+            System.out.println("TESTE 2");
             if (uso <= limites.get(i).getOk()) {
                 System.out.println("Dentro do limite");
                 try {
