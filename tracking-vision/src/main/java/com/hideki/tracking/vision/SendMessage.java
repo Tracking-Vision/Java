@@ -38,6 +38,8 @@ public class SendMessage {
     public void mandarMensagemAviso(List<Limites> limites, Log log) throws IOException {
         Double uso = null;
         System.out.println("Entrou no método");
+        System.out.println(limites);
+        System.out.println(log);
         for (int i = 0; i < limites.size(); i++) {
             System.out.println("TESTE 1");
             if (limites.get(i).getTipo().equalsIgnoreCase("CPU")) {
