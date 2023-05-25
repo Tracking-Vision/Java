@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SendMessage {
 
-    private String webHookUrl = "https://hooks.slack.com/services/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";
+    private String webHookUrl = "https://hooks.slack.com/services/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";
     private String channel = "";
     public void sendMessage(String message) throws IOException {
         try {
