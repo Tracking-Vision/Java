@@ -53,13 +53,16 @@ public class SendMessage {
                 System.out.println("Dentro do limite");
                 try {
                     sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está dentro do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getOk()));
+                    System.out.println("Mensagem enviada");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (uso > limites.get(i).getOk() && uso <= limites.get(i).getAviso()) {
                 System.out.println("Acima do limite");
                 try {
+
                     sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está acima do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getOk()));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
