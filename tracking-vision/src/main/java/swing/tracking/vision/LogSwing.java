@@ -37,7 +37,7 @@ public class LogSwing extends javax.swing.JFrame {
     }
 //    SendMessage sendMessage = new SendMessage();
 
-    private void capturaDados() {
+    public void capturaDados() {
         LogService logService = new LogService();
         MaquinaService maquinaService = new MaquinaService();
 
@@ -47,7 +47,13 @@ public class LogSwing extends javax.swing.JFrame {
         JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
         DiscoGrupo disco = looca.getGrupoDeDiscos();
 
+
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+        if(hostname.size()>1) {
+            System.out.println("Mais de uma máquina com o mesmo hostname");
+
+        }
+
 
         //Frequncia do processador convertida para GHz
         Double usoDisco = (double) (api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
@@ -104,6 +110,7 @@ public class LogSwing extends javax.swing.JFrame {
                         if (janelas.get(j).toLowerCase().contains(janelasBloqueadas.getNome().toLowerCase())) {
                             JOptionPane.showMessageDialog(null, "seu computador sera desligado");
                             try {
+                                sendMessage.sendMessage(String.format("O computador %d da empresa %d sera desligado em 2 minutos", hostname.get(0).getIdMaquina(), hostname.get(0).getFkEmpresa()));
                                 Runtime.getRuntime().exec("shutdown -s -t 120");
                             } catch (IOException e) {
                                 throw new RuntimeException(e);

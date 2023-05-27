@@ -93,9 +93,9 @@ public class Logs {
             this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         }
 
-        public void log(String message) {
+        public void log(String message, String email) {
             String timestamp = LocalDateTime.now().format(dateTimeFormatter);
-            String logMessage = String.format("[%s] %s%n", timestamp, message);
+            String logMessage = String.format("[%s] O funcionario com o email: %s teve seu %s%n", timestamp,email, message);
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
                 writer.write(logMessage);

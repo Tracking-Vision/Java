@@ -16,10 +16,10 @@ public class Maquina {
     private Double leituraDisco;
     private Double escritaDisco;
     private Integer fkEmpresa;
-    private Integer fkJanelasBloqueadas;
 
 
-    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkEmpresa, Integer fkJanelasBloqueadas) {
+
+    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkEmpresa) {
         this.idMaquina = idMaquina;
         this.hostnameMaquina = hostnameMaquina;
         this.status = status;
@@ -32,7 +32,6 @@ public class Maquina {
         this.leituraDisco = leituraDisco;
         this.escritaDisco = escritaDisco;
         this.fkEmpresa = fkEmpresa;
-        this.fkJanelasBloqueadas = fkJanelasBloqueadas;
     }
 
     public Maquina() {
@@ -135,13 +134,6 @@ public class Maquina {
         this.fkEmpresa = fkEmpresa;
     }
 
-    public Integer getFkJanelasBloqueadas() {
-        return fkJanelasBloqueadas;
-    }
-
-    public void setFkJanelasBloqueadas(Integer fkJanelasBloqueadas) {
-        this.fkJanelasBloqueadas = fkJanelasBloqueadas;
-    }
 
     @Override
     public String toString() {
@@ -158,7 +150,6 @@ public class Maquina {
                 ", leituraDisco=" + leituraDisco +
                 ", escritaDisco=" + escritaDisco +
                 ", fkEmpresa=" + fkEmpresa +
-                ", fkJanelasBloqueadas=" + fkJanelasBloqueadas +
                 '}';
     }
 

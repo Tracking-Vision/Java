@@ -230,9 +230,9 @@ public class TelaLogin extends javax.swing.JFrame {
             MaquinaService maquinaService = new MaquinaService();
             Looca looca = new Looca();
             Rede rede = looca.getRede();
-            List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+            List<Maquina> hostname = new ArrayList<>();
             Logs logs = new Logs("logs.txt");
-            logs.log("Login realizado com esso!");
+            logs.log("Login realizado com sucesso!", login);
 
 
             RedeService redeDao = new RedeService();
@@ -240,8 +240,8 @@ public class TelaLogin extends javax.swing.JFrame {
 
 
 
-            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-            List<RedeInterface> redes = new ArrayList<>();
+            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
+
             if (hostname.isEmpty()) {
                 lblLogin.setText("Cadastrando maquina...");
                 Double frequenciaCpu = Double.valueOf(api.getProcessador().getFrequencia());
@@ -258,6 +258,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
                 Double escritaDisco = Double.valueOf(api.getDisco().get(0).getBytesDeEscritas());
                 escritaDisco = escritaDisco / 100000000.00;
+                List<RedeInterface> redes = new ArrayList<>();
                 for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
 
                     if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
@@ -267,12 +268,13 @@ public class TelaLogin extends javax.swing.JFrame {
                     }
                 }
 
-                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco,funcDao.retornarFkEmpresa(login,senha), 1);
+                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco,funcDao.retornarFkEmpresa(login,senha));
 
                 maquinaService.salvarMaquina(maquina);
 
-                hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-                System.out.println("Hostname do for do lgin: "+ hostname);
+                hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
+
+
                 lblLogin.setText("Cadastrando rede");
                 Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac(),hostname.get(0).getIdMaquina());
                 redeDao.cadastrarRede(redesCadastrar);
@@ -281,11 +283,13 @@ public class TelaLogin extends javax.swing.JFrame {
                 
             }
 
-            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-            System.out.println(hostname.get(0).getIdMaquina());
+            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
+
 
             this.dispose();
+
             LogSwing.main(new String[0]);
+
         } else {
             lblLogin.setText("""
                 Senha ou login invalido

@@ -28,6 +28,6 @@ public class RedeService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        return con.queryForObject("select idRede from placaRede where nomeRede = ? and nomeExibicao = ? and ipv4 = ? and mac = ?", Integer.class, rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac());
+        return con.queryForObject("select idRede from placaRede where nomeRede = ? and nomeExibicao = ? and ipv4 = ? and mac = ? and fkMaquina = ?", Integer.class, rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac(), rede.getFkMaquina());
     }
 }

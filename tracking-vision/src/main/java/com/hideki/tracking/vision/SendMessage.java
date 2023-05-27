@@ -37,11 +37,7 @@ public class SendMessage {
 
     public void mandarMensagemAviso(List<Limites> limites, Log log) throws IOException {
         Double uso = null;
-        System.out.println("Entrou no método");
-        System.out.println(limites);
-        System.out.println(log);
         for (int i = 0; i < limites.size(); i++) {
-            System.out.println("TESTE 1");
             if (limites.get(i).getTipo().equalsIgnoreCase("CPU")) {
                 uso = log.getUsoCpu();
             } else if (limites.get(i).getTipo().equalsIgnoreCase("RAM")) {
@@ -51,12 +47,10 @@ public class SendMessage {
             } else {
                 uso = null;
             }
-            System.out.println("TESTE 2");
             if (uso <= limites.get(i).getOk()) {
                 System.out.println("Dentro do limite");
                 try {
                     sendMessage(String.format("A máquina %d está com o uso de %s em %.2f, está dentro do limite de %.2f", log.getFkMaquina(), limites.get(i).getTipo(), uso, limites.get(i).getOk()));
-                    System.out.println("Mensagem enviada");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
