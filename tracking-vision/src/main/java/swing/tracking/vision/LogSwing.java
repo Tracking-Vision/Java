@@ -49,10 +49,7 @@ public class LogSwing extends javax.swing.JFrame {
 
 
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-        if(hostname.size()>1) {
-            System.out.println("Mais de uma máquina com o mesmo hostname");
 
-        }
 
 
         //Frequncia do processador convertida para GHz
