@@ -11,6 +11,6 @@ public class JanelasBloqueadasService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        return con.query("select * from janelasbloqueadas where fkEmpresa = ?", new BeanPropertyRowMapper(JanelasBloqueadasService.class), fkEmpresa);
+        return con.query("select * from janelasbloqueadas where fkEmpresa = ?", new BeanPropertyRowMapper(JanelasBloqueadas.class), fkEmpresa);
     }
 }

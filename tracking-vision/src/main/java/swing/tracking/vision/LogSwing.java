@@ -10,46 +10,89 @@ import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.hideki.tracking.vision.*;
-//importar logger
+import org.json.JSONObject;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.*;
-import java.io.IOException;
 
 /**
- *
  * @author PAULOROBERTODEALMEID
  */
 public class LogSwing extends javax.swing.JFrame {
 
+    LogService logService = new LogService();
+    MaquinaService maquinaService = new MaquinaService();
+    API api = new API();
+    Looca looca = new Looca();
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSair;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel panelLog;
+
     /**
      * Creates new form Log
      */
-    public LogSwing() throws IOException {
+    public LogSwing() throws IOException, InterruptedException {
         initComponents();
         capturaDados();
         setLocationRelativeTo(null);
-//        sendMessage.sendMessage("Sistema iniciado");
+        System.out.println(looca.getMemoria().toString());
+//
     }
-//    SendMessage sendMessage = new SendMessage();
 
-    public void capturaDados() {
-        LogService logService = new LogService();
-        MaquinaService maquinaService = new MaquinaService();
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
 
-        API api = new API();
-        Looca looca = new Looca();
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new LogSwing().setVisible(true);
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void capturaDados() throws IOException, InterruptedException {
+
         Rede rede = looca.getRede();
         JanelaGrupo janelaGrupo = looca.getGrupoDeJanelas();
         DiscoGrupo disco = looca.getGrupoDeDiscos();
 
 
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
-
 
 
         //Frequncia do processador convertida para GHz
@@ -59,8 +102,9 @@ public class LogSwing extends javax.swing.JFrame {
         //Uso da ram to GB
         Double usoRam = Double.valueOf(api.getMemoriaEmUso());
         usoRam = usoRam / 1073741824.00;
-        Double finalUsoDisco1 = usoDisco;
-        Double finalUsoRam1 = usoRam;
+
+        Double finalUsoDisco = usoDisco;
+        Double finalUsoRam = usoRam;
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -87,27 +131,28 @@ public class LogSwing extends javax.swing.JFrame {
 
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
-                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco1, finalUsoRam1, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
+                    Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco, finalUsoRam, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
 
-                    System.out.println(log.toString());
+                    System.out.println(log);
                     logService.salvarLog(log);
 
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
-                    SendMessage sendMessage = new SendMessage();
+                    JSONObject json = new JSONObject();
+                    json.put("text", "Aviso de uso de recursos \n" + "Processador: " + log.getUsoCpu() + "%\n" + "Disco: " + log.getUsoDisco() + "GB\n" + "Memoria: " + log.getUsoRam() + "GB\n");
                     try {
-                        sendMessage.mandarMensagemAviso(limites, log);
-                    } catch (IOException e) {
+                        Slack.sendMessage(json);
+                    } catch (IOException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     JanelasBloqueadasService janelasBloqueadasService = new JanelasBloqueadasService();
+                    System.out.println(hostname.get(0).getFkEmpresa());
                     List<JanelasBloqueadas> janelasBloqueadasList = janelasBloqueadasService.retornarJanelasBloqueadas(hostname.get(0).getFkEmpresa());
 
                     for (JanelasBloqueadas janelasBloqueadas : janelasBloqueadasList) {
                         if (janelas.get(j).toLowerCase().contains(janelasBloqueadas.getNome().toLowerCase())) {
                             JOptionPane.showMessageDialog(null, "seu computador sera desligado");
                             try {
-                                sendMessage.sendMessage(String.format("O computador %d da empresa %d sera desligado em 2 minutos", hostname.get(0).getIdMaquina(), hostname.get(0).getFkEmpresa()));
                                 Runtime.getRuntime().exec("shutdown -s -t 120");
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -163,46 +208,13 @@ public class LogSwing extends javax.swing.JFrame {
 
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
-        panelLogLayout.setHorizontalGroup(
-            panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(189, 189, 189)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
-                .addContainerGap(113, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(53, 53, 53))
-            .addGroup(panelLogLayout.createSequentialGroup()
-                .addGap(336, 336, 336)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelLogLayout.setVerticalGroup(
-            panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel7)
-                .addGap(42, 42, 42)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
-        );
+        panelLogLayout.setHorizontalGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(panelLogLayout.createSequentialGroup().addGap(189, 189, 189).addComponent(jLabel2).addGap(0, 0, Short.MAX_VALUE)).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup().addContainerGap(113, Short.MAX_VALUE).addComponent(jLabel7).addGap(53, 53, 53)).addGroup(panelLogLayout.createSequentialGroup().addGap(336, 336, 336).addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        panelLogLayout.setVerticalGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup().addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE).addGap(12, 12, 12).addComponent(jLabel7).addGap(42, 42, 42).addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(67, 67, 67)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(panelLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 0, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -210,50 +222,5 @@ public class LogSwing extends javax.swing.JFrame {
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnSairActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            try {
-                new LogSwing().setVisible(true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSair;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel panelLog;
     // End of variables declaration//GEN-END:variables
 }

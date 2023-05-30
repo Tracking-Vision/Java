@@ -17,4 +17,3 @@ com\hideki\tracking\vision\Redes.class
 swing\tracking\vision\TelaLogin$2.class
 com\hideki\tracking\vision\ConexaoMysql.class
 com\hideki\tracking\vision\API.class
-com\hideki\tracking\vision\SendMessage.class
