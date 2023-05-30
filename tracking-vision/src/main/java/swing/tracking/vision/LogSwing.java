@@ -155,7 +155,12 @@ public class LogSwing extends javax.swing.JFrame {
                         if (janelas.get(j).toLowerCase().contains(janelasBloqueadas.getNome().toLowerCase())) {
                             JOptionPane.showMessageDialog(null, "seu computador sera desligado");
                             try {
+                                if(looca.getSistema().getSistemaOperacional().equalsIgnoreCase("windows")) {
                                 Runtime.getRuntime().exec("shutdown -s -t 120");
+
+                                }else {
+                                    Runtime.getRuntime().exec("sudo shutdown now");
+                                }
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
