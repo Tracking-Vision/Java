@@ -24,6 +24,13 @@ public class MaquinaService {
 
         return con.query("select * from maquina where hostnameMaquina = ?", new BeanPropertyRowMapper(Maquina.class), hostname);
     }
+    public List<Maquina> buscarPeloHostnameMySql(String hostname) {
+        ConexaoMysql conexaoMysql = new ConexaoMysql();
+
+        JdbcTemplate con = conexaoMysql.getConnection();
+
+        return con.query("select * from maquina where hostnameMaquina = ?", new BeanPropertyRowMapper(Maquina.class), hostname);
+    }
 
     public List<Maquina> buscarPeloHostname(String hostname, Integer fkEmpresa) {
         Conexao conexao = new Conexao();

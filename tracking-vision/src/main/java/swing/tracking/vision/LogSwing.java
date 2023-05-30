@@ -134,11 +134,13 @@ public class LogSwing extends javax.swing.JFrame {
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco, finalUsoRam, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
 
                     System.out.println(log);
-                    logService.salvarLog(log);
+                    List<Maquina> hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
+                    logService.salvarLog(log, hostnameMysql.get(0).getIdMaquina());
 
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
                     JSONObject json = new JSONObject();
+                    System.out.println("Envia mensagem para o slack");
                     json.put("text", "Aviso de uso de recursos \n" + "Processador: " + log.getUsoCpu() + "%\n" + "Disco: " + log.getUsoDisco() + "GB\n" + "Memoria: " + log.getUsoRam() + "GB\n");
                     try {
                         Slack.sendMessage(json);

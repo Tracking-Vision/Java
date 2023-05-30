@@ -13,8 +13,12 @@ public class Slack {
     private static final HttpClient client = HttpClient.newHttpClient();
 
     public static void sendMessage(JSONObject content) throws IOException, InterruptedException {
+        System.out.println("Enviando mensagem para o slack");
         HttpRequest request = HttpRequest.newBuilder(URI.create(URL)).header("accept", "application/json").POST(HttpRequest.BodyPublishers.ofString(content.toString())).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Response: "+response.body());
+        System.out.println("Request: "+ response.request());
     }
 }
