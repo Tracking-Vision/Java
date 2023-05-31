@@ -33,6 +33,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogin;
     private javax.swing.JTextField txtLogin;
     private javax.swing.JPasswordField txtSenha;
+
     /**
      * Creates new form TelaLogin
      */
@@ -213,39 +214,42 @@ public class TelaLogin extends javax.swing.JFrame {
 
             Rede rede = looca.getRede();
             List<Maquina> hostname = new ArrayList<>();
+            List<Maquina> hostnameMysql = new ArrayList<>();
 
             logs.log("Login realizado com sucesso!", login);
 
 
             hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
+            hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
+
+            Double frequenciaCpu = Double.valueOf(api.getProcessador().getFrequencia());
+            frequenciaCpu = frequenciaCpu / 1000000000.00;
+
+            Double capRam = Double.valueOf(api.getMemoria().getTotal());
+            capRam = capRam / 1073741824.00;
+
+            Double capDisco = Double.valueOf(api.getDisco().get(0).getTamanho());
+            capDisco = capDisco / 1073741824.00;
+
+            Double leituraDisco = Double.valueOf(api.getDisco().get(0).getBytesDeLeitura());
+            leituraDisco = leituraDisco / 100000000.00;
+
+            Double escritaDisco = Double.valueOf(api.getDisco().get(0).getBytesDeEscritas());
+            escritaDisco = escritaDisco / 100000000.00;
+            List<RedeInterface> redes = new ArrayList<>();
+            for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
+
+                if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
+
+                    redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
+
+                }
+            }
+            Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, funcDao.retornarFkEmpresa(login, senha));
 
             if (hostname.isEmpty()) {
                 lblLogin.setText("Cadastrando maquina...");
-                Double frequenciaCpu = Double.valueOf(api.getProcessador().getFrequencia());
-                frequenciaCpu = frequenciaCpu / 1000000000.00;
 
-                Double capRam = Double.valueOf(api.getMemoria().getTotal());
-                capRam = capRam / 1073741824.00;
-
-                Double capDisco = Double.valueOf(api.getDisco().get(0).getTamanho());
-                capDisco = capDisco / 1073741824.00;
-
-                Double leituraDisco = Double.valueOf(api.getDisco().get(0).getBytesDeLeitura());
-                leituraDisco = leituraDisco / 100000000.00;
-
-                Double escritaDisco = Double.valueOf(api.getDisco().get(0).getBytesDeEscritas());
-                escritaDisco = escritaDisco / 100000000.00;
-                List<RedeInterface> redes = new ArrayList<>();
-                for (int i = 0; i < rede.getGrupoDeInterfaces().getInterfaces().size(); i++) {
-
-                    if (!rede.getGrupoDeInterfaces().getInterfaces().get(i).getEnderecoIpv4().isEmpty() && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesRecebidos() > 0 && rede.getGrupoDeInterfaces().getInterfaces().get(i).getPacotesEnviados() > 0) {
-
-                        redes.add(rede.getGrupoDeInterfaces().getInterfaces().get(i));
-
-                    }
-                }
-
-                Maquina maquina = new Maquina(null, rede.getParametros().getHostName(), 1, api.getProcessador().getNome(), frequenciaCpu, "Memoria", capRam, api.getDisco().get(0).getModelo(), capDisco, leituraDisco, escritaDisco, funcDao.retornarFkEmpresa(login, senha));
 
                 maquinaService.salvarMaquina(maquina);
 
@@ -255,12 +259,19 @@ public class TelaLogin extends javax.swing.JFrame {
                 lblLogin.setText("Cadastrando rede");
                 Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac(), hostname.get(0).getIdMaquina());
                 redeDao.cadastrarRede(redesCadastrar);
+            } else if (hostnameMysql.isEmpty()) {
+                lblLogin.setText("Cadastrando maquina...");
+                maquinaService.salvarMaquinaMysql(maquina);
+
+                hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
+
+
+                lblLogin.setText("Cadastrando rede");
+                Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac(), hostnameMysql.get(0).getIdMaquina());
+                redeDao.cadastrarRedeMysql(redesCadastrar);
             } else {
                 lblLogin.setText("Maquina ja cadastrada");
-
             }
-
-            hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
 
 
             this.dispose();

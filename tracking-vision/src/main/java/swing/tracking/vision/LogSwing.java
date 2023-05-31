@@ -93,6 +93,7 @@ public class LogSwing extends javax.swing.JFrame {
 
 
         List<Maquina> hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName());
+        List<Maquina> hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
 
 
         //Frequncia do processador convertida para GHz
@@ -132,10 +133,10 @@ public class LogSwing extends javax.swing.JFrame {
                 for (int j = 0; j < janelas.size(); j++) {
                     String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
                     Log log = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco, finalUsoRam, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostname.get(0).getIdMaquina());
-
+                    Log logMysql = new Log(null, timeStamp, janelasPid.get(j), janelas.get(j), api.getProcessador().getUso(), finalUsoDisco, finalUsoRam, (redes.get(0).getBytesRecebidos() * 8) / 1000000, (redes.get(0).getBytesEnviados() * 8) / 1000000, hostnameMysql.get(0).getIdMaquina());
                     System.out.println(log);
-                    List<Maquina> hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
-                    logService.salvarLog(log, hostnameMysql.get(0).getIdMaquina());
+                    logService.salvarLog(log);
+                    logService.salvarLogMysql(logMysql);
 
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());

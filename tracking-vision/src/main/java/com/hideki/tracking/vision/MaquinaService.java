@@ -14,6 +14,13 @@ public class MaquinaService {
         JdbcTemplate conMysql = conexaoMysql.getConnection();
 
         con.update("insert into maquina(status,hostnameMaquina,nomeModeloCpu,clockCpu,nomeModeloRam,capacidadeTotalRam,nomeModeloDisco,capacidadeTotalDisco,leituraDisco,escritaDisco,fkEmpresa) values (?,?,?,?,?,?,?,?,?,?,?)", 1,maquina.getHostnameMaquina(), maquina.getNomeModeloCpu(), maquina.getClockCpu(), maquina.getNomeModeloRam(), maquina.getCapacidadeTotalRam(), maquina.getNomeModeloDisco(), maquina.getCapacidadeTotalDisco(), maquina.getLeituraDisco(), maquina.getEscritaDisco(),maquina.getFkEmpresa());
+    }
+
+    public void salvarMaquinaMysql(Maquina maquina) {
+        ConexaoMysql conexaoMysql = new ConexaoMysql();
+
+        JdbcTemplate conMysql = conexaoMysql.getConnection();
+
         conMysql.update("insert into maquina(status,hostnameMaquina,nomeModeloCpu,clockCpu,nomeModeloRam,capacidadeTotalRam,nomeModeloDisco,capacidadeTotalDisco,leituraDisco,escritaDisco,fkEmpresa) values (?,?,?,?,?,?,?,?,?,?,?)", 1,maquina.getHostnameMaquina(), maquina.getNomeModeloCpu(), maquina.getClockCpu(), maquina.getNomeModeloRam(), maquina.getCapacidadeTotalRam(), maquina.getNomeModeloDisco(), maquina.getCapacidadeTotalDisco(), maquina.getLeituraDisco(), maquina.getEscritaDisco(),null);
     }
 
@@ -40,13 +47,7 @@ public class MaquinaService {
         return con.query("select * from maquina where hostnameMaquina = ? and fkEmpresa = ?", new BeanPropertyRowMapper(Maquina.class), hostname, fkEmpresa);
     }
 
-    public Integer idMaquinaAtual(String hostname, Integer fkEmpresa) {
-        Conexao conexao = new Conexao();
 
-        JdbcTemplate con = conexao.getConnection();
-
-        return con.queryForObject("select idMaquina from maquina where hostnameMaquina = ? and fkEmpresa = ?", Integer.class, hostname, fkEmpresa);
-    }
 
 
 

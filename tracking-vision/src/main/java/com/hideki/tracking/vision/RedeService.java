@@ -20,6 +20,13 @@ public class RedeService {
         JdbcTemplate conMysql = conexaoMysql.getConnection();
 
         con.update("insert into placaRede(nomeRede,nomeExibicao,ipv4,mac,fkMaquina) values (?, ?, ?, ?,?)", rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac(),rede.getFkMaquina());
+    }
+
+    public void cadastrarRedeMysql(Redes rede) {
+        ConexaoMysql conexaoMysql = new ConexaoMysql();
+
+        JdbcTemplate conMysql = conexaoMysql.getConnection();
+
         conMysql.update("insert into placaRede(nomeRede,nomeExibicao,ipv4,mac,fkMaquina) values (?, ?, ?, ?,?)", rede.getNomeRede(), rede.getNomeExibicao(), rede.getIpv4(), rede.getMac(),rede.getFkMaquina());
     }
 
