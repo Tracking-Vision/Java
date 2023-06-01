@@ -144,7 +144,7 @@ public class LogSwing extends javax.swing.JFrame {
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
                     try {
-                        AlertasSlack.mandarAlerta(log, limites);
+                        AlertasSlack.mandarAlerta(log, limites, hostname.get(0).getFkEmpresa());
                     } catch (IOException | InterruptedException e ) {
                         throw new RuntimeException(e);
                     }
