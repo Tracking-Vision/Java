@@ -21,7 +21,7 @@ public class AlertasSlack {
 
         SlackBot.sendMessage(new JSONObject().put("text", mensagem));
 
-        mensagem = "A maquina " + log.getFkMaquina();
+        mensagem = "A maquina " + log.getFkMaquina() + " da empresa " + fkEmpresa;
 
         if (log.getUsoRam() <= limites.get(0).getOk()) {
             mensagem += String.format(" esta com o uso de RAM em %.2f%%, e está com uso OK", log.getUsoRam());
@@ -35,7 +35,7 @@ public class AlertasSlack {
 
         SlackBot.sendMessage(new JSONObject().put("text", mensagem));
 
-        mensagem = "A maquina " + log.getFkMaquina();
+        mensagem = "A maquina " + log.getFkMaquina() + " da empresa " + fkEmpresa;
 
         if (log.getUsoDisco() <= limites.get(0).getOk()) {
             mensagem += String.format(" esta com o uso de Disco em %.2f%%, e está com uso OK", log.getUsoDisco());
