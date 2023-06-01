@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Maquina {
     private Integer idMaquina;
     private String hostnameMaquina;
-    private Integer status;
+    private Integer statusMaquina;
     private String nomeModeloCpu;
     private Double clockCpu;
     private String nomeModeloRam;
@@ -19,10 +19,10 @@ public class Maquina {
 
 
 
-    public Maquina(Integer idMaquina, String hostnameMaquina, Integer status, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkEmpresa) {
+    public Maquina(Integer idMaquina, String hostnameMaquina, Integer statusMaquina, String nomeModeloCpu, Double clockCpu, String nomeModeloRam, Double capacidadeTotalRam, String nomeModeloDisco, Double capacidadeTotalDisco, Double leituraDisco, Double escritaDisco, Integer fkEmpresa) {
         this.idMaquina = idMaquina;
         this.hostnameMaquina = hostnameMaquina;
-        this.status = status;
+        this.statusMaquina = statusMaquina;
         this.nomeModeloCpu = nomeModeloCpu;
         this.clockCpu = clockCpu;
         this.nomeModeloRam = nomeModeloRam;
@@ -54,11 +54,11 @@ public class Maquina {
     }
 
     public Integer getStatus() {
-        return status;
+        return statusMaquina;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatus(Integer statusMaquina) {
+        this.statusMaquina = statusMaquina;
     }
 
     public String getNomeModeloCpu() {
@@ -140,7 +140,7 @@ public class Maquina {
         return "Maquina{" +
                 "idMaquina=" + idMaquina +
                 ", hostnameMaquina='" + hostnameMaquina + '\'' +
-                ", status=" + status +
+                ", statusMaquina=" + statusMaquina +
                 ", nomeModeloCpu='" + nomeModeloCpu + '\'' +
                 ", clockCpu=" + clockCpu +
                 ", nomeModeloRam='" + nomeModeloRam + '\'' +

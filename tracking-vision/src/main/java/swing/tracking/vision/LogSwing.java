@@ -96,13 +96,17 @@ public class LogSwing extends javax.swing.JFrame {
         List<Maquina> hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
 
 
-        //Frequncia do processador convertida para GHz
+
         Double usoDisco = (double) (api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-        usoDisco = usoDisco / 1073741824.00;
+        usoDisco = usoDisco/disco.getDiscos().get(0).getTamanho()*100;
+        System.out.println(usoDisco);
+
 
         //Uso da ram to GB
         Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-        usoRam = usoRam / 1073741824.00;
+        usoRam = usoRam/looca.getMemoria().getTotal()*100;
+        System.out.println(usoRam);
+
 
         Double finalUsoDisco = usoDisco;
         Double finalUsoRam = usoRam;
@@ -137,15 +141,11 @@ public class LogSwing extends javax.swing.JFrame {
                     System.out.println(log);
                     logService.salvarLog(log);
                     logService.salvarLogMysql(logMysql);
-
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
-                    JSONObject json = new JSONObject();
-                    System.out.println("Envia mensagem para o slack");
-                    json.put("text", "Aviso de uso de recursos \n" + "Processador: " + log.getUsoCpu() + "%\n" + "Disco: " + log.getUsoDisco() + "GB\n" + "Memoria: " + log.getUsoRam() + "GB\n");
                     try {
-                        Slack.sendMessage(json);
-                    } catch (IOException | InterruptedException e) {
+                        AlertasSlack.mandarAlerta(log, limites);
+                    } catch (IOException | InterruptedException e ) {
                         throw new RuntimeException(e);
                     }
                     JanelasBloqueadasService janelasBloqueadasService = new JanelasBloqueadasService();

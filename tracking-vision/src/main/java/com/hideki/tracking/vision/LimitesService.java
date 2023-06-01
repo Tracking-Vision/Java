@@ -11,6 +11,6 @@ public class LimitesService {
 
         JdbcTemplate con = conexao.getConnection();
 
-        return con.query("select * from limites where fkMaquina = ?", new BeanPropertyRowMapper(Limites.class), fkMaquina);
+        return con.query("select * from limites where fkMaquina = ? and tipo = 1", new BeanPropertyRowMapper(Limites.class), fkMaquina);
     }
 }
