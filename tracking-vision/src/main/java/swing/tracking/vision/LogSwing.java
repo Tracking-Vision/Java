@@ -10,7 +10,6 @@ import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.hideki.tracking.vision.*;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -42,7 +41,9 @@ public class LogSwing extends javax.swing.JFrame {
         initComponents();
         capturaDados();
         setLocationRelativeTo(null);
-        System.out.println(looca.getMemoria().toString());
+        setResizable(false);
+        setTitle("Monitoramento de Máquina");
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 //
     }
 
@@ -96,15 +97,14 @@ public class LogSwing extends javax.swing.JFrame {
         List<Maquina> hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
 
 
-
         Double usoDisco = (double) (api.getDisco().get(0).getTamanho() - disco.getVolumes().get(0).getDisponivel());
-        usoDisco = usoDisco/disco.getDiscos().get(0).getTamanho()*100;
+        usoDisco = usoDisco / disco.getDiscos().get(0).getTamanho() * 100;
         System.out.println(usoDisco);
 
 
         //Uso da ram to GB
         Double usoRam = Double.valueOf(api.getMemoriaEmUso());
-        usoRam = usoRam/looca.getMemoria().getTotal()*100;
+        usoRam = usoRam / looca.getMemoria().getTotal() * 100;
         System.out.println(usoRam);
 
 
@@ -143,10 +143,12 @@ public class LogSwing extends javax.swing.JFrame {
                     logService.salvarLogMysql(logMysql);
                     LimitesService limitesService = new LimitesService();
                     List<Limites> limites = limitesService.retornarLimites(log.getFkMaquina());
-                    try {
-                        AlertasSlack.mandarAlerta(log, limites, hostname.get(0).getFkEmpresa());
-                    } catch (IOException | InterruptedException e ) {
-                        throw new RuntimeException(e);
+                    if (limites.size() > 0) {
+                        try {
+                            AlertasSlack.mandarAlerta(log, limites, hostname.get(0).getFkEmpresa());
+                        } catch (IOException | InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     JanelasBloqueadasService janelasBloqueadasService = new JanelasBloqueadasService();
                     System.out.println(hostname.get(0).getFkEmpresa());
@@ -154,12 +156,12 @@ public class LogSwing extends javax.swing.JFrame {
 
                     for (JanelasBloqueadas janelasBloqueadas : janelasBloqueadasList) {
                         if (janelas.get(j).toLowerCase().contains(janelasBloqueadas.getNome().toLowerCase())) {
-                            JOptionPane.showMessageDialog(null, "seu computador sera desligado");
+                            JOptionPane.showMessageDialog(null, "seu computador sera desligado", "Alerta", JOptionPane.WARNING_MESSAGE);
                             try {
-                                if(looca.getSistema().getSistemaOperacional().equalsIgnoreCase("windows")) {
-                                Runtime.getRuntime().exec("shutdown -s -t 120");
+                                if (looca.getSistema().getSistemaOperacional().equalsIgnoreCase("windows")) {
+                                    Runtime.getRuntime().exec("shutdown -s -t 120");
 
-                                }else {
+                                } else {
                                     Runtime.getRuntime().exec("sudo shutdown now");
                                 }
                             } catch (IOException e) {
@@ -228,7 +230,8 @@ public class LogSwing extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        System.exit(0);
+        Logout logout = new Logout();
+        logout.setVisible(true);
     }//GEN-LAST:event_btnSairActionPerformed
     // End of variables declaration//GEN-END:variables
 }

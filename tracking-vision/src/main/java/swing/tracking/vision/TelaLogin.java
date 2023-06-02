@@ -40,6 +40,8 @@ public class TelaLogin extends javax.swing.JFrame {
     public TelaLogin() {
         initComponents();
         setLocationRelativeTo(null);
+        setResizable(false);
+        setTitle("Tracking Vision - Login");
         setPlaceholder(txtLogin, "Digite seu email:");
         setPlaceholder(txtSenha, "***************");
     }
