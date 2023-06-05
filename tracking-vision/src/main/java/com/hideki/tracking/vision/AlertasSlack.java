@@ -9,7 +9,7 @@ import java.util.List;
 public class AlertasSlack {
     public static void mandarAlerta(Log log, List<Limites> limites, Integer fkEmpresa) throws IOException, InterruptedException {
         Looca looca = new Looca();
-        String mensagem = "A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
+        String mensagem = "[ "+ log.getHorarioCapturado() + " ] A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
 
         if (log.getUsoCpu() <= limites.get(0).getOk()) {
             mensagem += String.format(" esta com o uso de CPU em %.2f%%, e está com uso OK", log.getUsoCpu());
@@ -21,7 +21,7 @@ public class AlertasSlack {
 
         SlackBot.sendMessage(new JSONObject().put("text", mensagem));
 
-        mensagem = "A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
+        mensagem = "[ "+ log.getHorarioCapturado() + " ] A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
 
         if (log.getUsoRam() <= limites.get(0).getOk()) {
             mensagem += String.format(" esta com o uso de RAM em %.2f%%, e está com uso OK", log.getUsoRam());
@@ -33,7 +33,7 @@ public class AlertasSlack {
 
         SlackBot.sendMessage(new JSONObject().put("text", mensagem));
 
-        mensagem = "A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
+        mensagem = "[ "+ log.getHorarioCapturado() + " ] A maquina " + log.getFkMaquina() + ", com o Hostname: " + MaquinaService.buscarPeloHostname(looca.getRede().getParametros().getHostName()).get(0).getHostnameMaquina() + " da empresa " + EmpresaService.retornarEmpresa(fkEmpresa).getNomeEmpresa();
 
         if (log.getUsoDisco() <= limites.get(0).getOk()) {
             mensagem += String.format(" esta com o uso de Disco em %.2f%%, e está com uso OK", log.getUsoDisco());

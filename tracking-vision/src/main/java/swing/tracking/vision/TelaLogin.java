@@ -218,7 +218,7 @@ public class TelaLogin extends javax.swing.JFrame {
             List<Maquina> hostname = new ArrayList<>();
             List<Maquina> hostnameMysql = new ArrayList<>();
 
-            logs.log("Login realizado com sucesso!", login);
+            logs.logLogin("Login realizado com sucesso!", login);
 
 
             hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
@@ -254,25 +254,34 @@ public class TelaLogin extends javax.swing.JFrame {
 
 
                 maquinaService.salvarMaquina(maquina);
-
                 hostname = maquinaService.buscarPeloHostname(rede.getParametros().getHostName(), funcDao.retornarFkEmpresa(login, senha));
+                logs.logCadastro("Cadastrada com sucesso no SQL Server!", hostname);
+
 
 
                 lblLogin.setText("Cadastrando rede");
                 Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac(), hostname.get(0).getIdMaquina());
                 redeDao.cadastrarRede(redesCadastrar);
-            } else if (hostnameMysql.isEmpty()) {
+                logs.logRede("Rede cadastrada com sucesso no SQL Server!", hostname, redesCadastrar);
+            }else {
+                lblLogin.setText("Maquina ja cadastrada");
+                logs.logCadastro("Já esta cadastrada no SQL Server");
+            }
+            if (hostnameMysql.isEmpty()) {
                 lblLogin.setText("Cadastrando maquina...");
                 maquinaService.salvarMaquinaMysql(maquina);
-
                 hostnameMysql = maquinaService.buscarPeloHostnameMySql(rede.getParametros().getHostName());
+                logs.logCadastro("Cadastrada com sucesso no MySQL!", hostnameMysql);
+
 
 
                 lblLogin.setText("Cadastrando rede");
                 Redes redesCadastrar = new Redes(null, redes.get(0).getNome(), redes.get(0).getNomeExibicao(), redes.get(0).getEnderecoIpv4().get(0), redes.get(0).getEnderecoMac(), hostnameMysql.get(0).getIdMaquina());
                 redeDao.cadastrarRedeMysql(redesCadastrar);
+                logs.logRede("Rede cadastrada com sucesso MySQL!", hostnameMysql, redesCadastrar);
             } else {
                 lblLogin.setText("Maquina ja cadastrada");
+                logs.logCadastro("Já esta cadastrada no MySQL");
             }
 
 
@@ -284,7 +293,7 @@ public class TelaLogin extends javax.swing.JFrame {
             lblLogin.setText("""
                     Senha ou login invalido
                     ou usuario nao cadastrado via web""");
-            logs.log("Tentativa de login", login);
+            logs.logLogin("Tentativa de login", login);
 
         }
 
