@@ -26,6 +26,7 @@ public class Logs {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(logMessage);
+            System.out.println("Mesaagem escrita");
         } catch (IOException e) {
             e.printStackTrace();
         }
