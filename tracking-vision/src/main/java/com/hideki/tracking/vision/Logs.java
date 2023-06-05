@@ -20,6 +20,7 @@ public class Logs {
     }
 
     public void logLogin(String message, String email) {
+        System.out.println("Logando");
         String timestamp = LocalDateTime.now().format(dateTimeFormatter);
         String logMessage = String.format("[%s] O funcionario com o email: %s teve seu %s%n", timestamp, email, message);
 
@@ -31,6 +32,7 @@ public class Logs {
     }
 
     public void logCadastro(String message, List<Maquina> hostname) {
+        System.out.println("Logando 2");
         String timestamp = LocalDateTime.now().format(dateTimeFormatter);
         String logMessage = String.format("[%s] A maquina com o Hostname: %s foi %s%n", timestamp, hostname.get(0).getHostnameMaquina(), message);
 
@@ -42,6 +44,7 @@ public class Logs {
     }
 
     public void logCadastro(String message) {
+        System.out.println("Logando 3");
         String timestamp = LocalDateTime.now().format(dateTimeFormatter);
         String logMessage = String.format("[%s] Maquina %s%n", timestamp,message);
 
@@ -53,6 +56,7 @@ public class Logs {
     }
 
     public void logRede(String message, List<Maquina> hostname, Redes rede) {
+        System.out.println("Logando 4");
         String timestamp = LocalDateTime.now().format(dateTimeFormatter);
         String logMessage = String.format("[%s] A maquina com o Hostname: %s teve sua %s, Nome da Rede: %s%n", timestamp, hostname.get(0).getHostnameMaquina(), message, rede.getNomeRede());
 
